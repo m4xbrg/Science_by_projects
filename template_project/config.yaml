@@ -1,0 +1,11 @@
+# Project configuration (edit per project)
+seed: 0
+t_final: 10.0
+dt: 0.01
+params:
+  # Example parameters
+  theta1: 1.0
+  theta2: 0.5
+initial_conditions:
+  # Example initial state vector
+  x0: [1.0, 0.0]
