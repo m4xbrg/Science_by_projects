@@ -1,0 +1,15 @@
+{
+  "id": "000",
+  "title": "[PROJECT_TITLE]",
+  "domain": "[Domain]",
+  "math_core": "[ODE|PDE|Probability|Optimization|Graph|\u2026]",
+  "tools": [
+    "NumPy",
+    "SciPy",
+    "Matplotlib"
+  ],
+  "viz_types": [
+    "time series"
+  ],
+  "related_projects": []
+}
