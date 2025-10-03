@@ -1,0 +1,20 @@
+{
+  "domain": "mathematics",
+  "math_core": "real analysis",
+  "tools": [
+    "sympy",
+    "numpy",
+    "matplotlib",
+    "streamlit",
+    "pandas"
+  ],
+  "visualizations": [
+    "curve plot",
+    "histogram"
+  ],
+  "related": [
+    "rational_function_analyzer",
+    "derivative_curvature_explorer",
+    "parameter_sweep_dashboard"
+  ]
+}

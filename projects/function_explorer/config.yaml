@@ -1,0 +1,6 @@
+expression: sin(x)/x
+window:
+- -10
+- 10
+samples: 2000
+tol: 1.0e-09
