@@ -1,0 +1,35 @@
+{
+  "title": "Matrix Workbench \u2014 Rank, Determinant, LU/QR; Unit Square/Cube Effects",
+  "domain": [
+    "mathematics",
+    "computational linear algebra"
+  ],
+  "math_core": [
+    "matrix factorization",
+    "numerical linear algebra"
+  ],
+  "computational_tools": [
+    "NumPy",
+    "Matplotlib",
+    "Pandas (for parquet I/O)"
+  ],
+  "visualization_type": [
+    "wireframe overlays",
+    "ellipse mapping",
+    "3D cube transform"
+  ],
+  "keywords": [
+    "rank",
+    "determinant",
+    "LU",
+    "QR",
+    "Householder",
+    "SVD",
+    "conditioning"
+  ],
+  "related_projects": [
+    "Singular Value Explorer",
+    "Least-Squares Geometry",
+    "Condition Number Studies"
+  ]
+}

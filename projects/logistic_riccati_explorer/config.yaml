@@ -1,0 +1,34 @@
+# Global configuration
+seed: 42
+t_span: [0.0, 10.0]
+t_eval: null         # null -> solver chooses; or provide list of times
+rtol: 1e-8
+atol: 1e-10
+solver: "RK45"
+
+model: "logistic"   # "logistic" or "riccati"
+
+# Initial conditions
+x0: 0.5
+
+# Logistic parameters
+logistic:
+  r: 1.2          # intrinsic growth rate
+  K: 3.0          # carrying capacity
+
+# Riccati parameters (constant coefficients): x' = a x^2 + b x + c
+riccati:
+  a: 1.0
+  b: -1.0
+  c: 0.0
+
+# Sensitivity analysis (logistic only)
+sensitivities:
+  enabled: true
+  with_respect_to: ["r", "K"]
+
+# Optional parameter sweep (logistic only). If non-empty, simulate multiple runs and append.
+
+sweep:
+  r: [0.5, 1.0, 1.5]
+  K: []           # leave empty to keep default K

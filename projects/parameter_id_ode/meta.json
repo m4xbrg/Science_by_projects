@@ -1,0 +1,27 @@
+{
+  "title": "Robust Parameter Identification for Nonlinear ODEs from Noisy Observations \u2014 A Pendulum Case Study",
+  "domain": [
+    "physics",
+    "dynamical-systems"
+  ],
+  "math_core": [
+    "ODE",
+    "optimization",
+    "statistics"
+  ],
+  "computational_tools": [
+    "NumPy",
+    "SciPy",
+    "Pandas",
+    "Matplotlib",
+    "PyYAML"
+  ],
+  "visualization_types": [
+    "curve plots",
+    "phase portraits",
+    "residual plots",
+    "sensitivity bar charts"
+  ],
+  "portfolio_links": [],
+  "version": "1.0.0"
+}

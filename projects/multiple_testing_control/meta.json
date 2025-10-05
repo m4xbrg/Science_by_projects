@@ -1,0 +1,14 @@
+{
+  "Domain": "statistics",
+  "MathCore": "probability",
+  "ComputationalTools": [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "pyyaml"
+  ],
+  "VisualizationType": [
+    "curve plots"
+  ],
+  "RelatedProjects": []
+}

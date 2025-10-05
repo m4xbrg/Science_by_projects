@@ -1,0 +1,25 @@
+{
+  "title": "Logistic/Riccati Explorer: Analytic vs. Numeric Solutions; Parameter Sensitivity",
+  "domain": [
+    "mathematical biology",
+    "applied mathematics"
+  ],
+  "math_core": [
+    "ODEs",
+    "sensitivity analysis"
+  ],
+  "computational_tools": [
+    "numpy",
+    "scipy",
+    "pandas",
+    "matplotlib",
+    "pyarrow",
+    "yaml"
+  ],
+  "visualization_types": [
+    "curve plots",
+    "phase portrait (1D proxy)",
+    "parameter sweep lines"
+  ],
+  "portfolio_links": []
+}

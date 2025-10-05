@@ -1,0 +1,28 @@
+seed: 42
+dataset:
+  type: moons           # moons | circles | blobs
+  n_samples: 3000
+  noise: 0.2
+  class_sep: 1.0        # used for blobs
+  n_features: 2         # used for blobs
+splits:
+  train: 0.6
+  val: 0.2
+  test: 0.2
+model:
+  lambda_l2: 1.0        # inverse of C: lambda = 1/C in sklearn terms
+  fit_intercept: true
+  max_iter: 200
+  solver: lbfgs         # lbfgs | liblinear | sag | saga | newton-cg
+calibration:
+  method: none          # none | platt | isotonic
+evaluation:
+  n_bins: 10
+  thresholds: [0.5]     # additional thresholds optional
+io:
+  out_dir: "results"
+  parquet_name: "results.parquet"
+viz:
+  dpi: 140
+  style: "default"
+  plot_decision_boundary: true

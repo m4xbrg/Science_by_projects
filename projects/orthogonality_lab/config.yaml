@@ -1,0 +1,15 @@
+seed: 42
+m: 50
+n: 20
+matrix:
+  kind: gaussian
+  correlation: 0.95
+  scale: 1.0
+  noise_level: 0.0
+method: mgs
+reorth: 1
+dtype: float64
+trials: 5
+io:
+  out_dir: "results"
+  parquet: true

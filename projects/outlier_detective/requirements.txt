@@ -1,0 +1,5 @@
+numpy
+pandas
+matplotlib
+pyyaml
+pyarrow  # optional (parquet); code falls back to CSV if missing

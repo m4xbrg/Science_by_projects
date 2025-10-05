@@ -1,0 +1,38 @@
+{
+  "title": "Orthogonality Lab \u2014 Gram\u2013Schmidt",
+  "domain": [
+    "mathematics",
+    "computer-science"
+  ],
+  "math_core": [
+    "linear-algebra",
+    "matrix-factorization",
+    "numerical-analysis"
+  ],
+  "computational_tools": [
+    "NumPy",
+    "SciPy",
+    "Pandas",
+    "Matplotlib",
+    "PyYAML"
+  ],
+  "visualization_types": [
+    "scatter",
+    "bar",
+    "animation"
+  ],
+  "keywords": [
+    "Gram\u2013Schmidt",
+    "orthogonality",
+    "finite precision",
+    "reorthogonalization",
+    "conditioning"
+  ],
+  "links": {
+    "related": [
+      "QR decomposition survey",
+      "Floating-point error propagation",
+      "SVD-based orthonormalization (future project)"
+    ]
+  }
+}

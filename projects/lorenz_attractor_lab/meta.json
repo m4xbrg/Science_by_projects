@@ -1,0 +1,31 @@
+{
+  "title": "Lorenz Attractor Lab: Integration, Poincar\u00e9 Sections, and Sensitivity to Initial Conditions",
+  "domain": [
+    "physics",
+    "dynamical-systems"
+  ],
+  "math_core": [
+    "ODE",
+    "nonlinear dynamics"
+  ],
+  "computational_tools": [
+    "NumPy",
+    "SciPy",
+    "Pandas",
+    "Matplotlib",
+    "PyYAML",
+    "PyArrow"
+  ],
+  "visualization_types": [
+    "phase portrait",
+    "Poincar\u00e9 section",
+    "time series",
+    "sensitivity curve"
+  ],
+  "related_projects": [
+    "chaos-map-logistic",
+    "rossler-attractor",
+    "henon-map"
+  ],
+  "version": "1.0.0"
+}

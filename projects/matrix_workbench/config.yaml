@@ -1,0 +1,10 @@
+matrix:
+  A2D: [[1.0, 0.5], [0.2, 1.2]]
+  A3D: [[1.2, 0.2, 0.0], [0.0, 0.9, -0.3], [0.1, 0.4, 1.1]]
+viz:
+  grid_res: 13
+  outdir: figs
+simulate:
+  outdir: results
+  compute_3d: true
+seed: 42

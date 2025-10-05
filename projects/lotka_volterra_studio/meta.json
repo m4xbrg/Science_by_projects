@@ -1,0 +1,30 @@
+{
+  "title": "Lotka\u2013Volterra Studio: nullclines, fixed points, limit cycles; parameter continuation",
+  "domain": [
+    "biology",
+    "ecology",
+    "dynamical-systems"
+  ],
+  "math_core": [
+    "ODE",
+    "nonlinear-dynamics",
+    "bifurcation-analysis"
+  ],
+  "computational_tools": [
+    "NumPy",
+    "SciPy",
+    "Pandas",
+    "Matplotlib",
+    "PyYAML",
+    "PyArrow"
+  ],
+  "visualization": [
+    "time-series",
+    "phase-portrait",
+    "nullclines",
+    "bifurcation-summary"
+  ],
+  "links": {
+    "related_projects": []
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Outlier Detective \u2014 Robust vs Classical Detection under Contamination",
+  "domain": [
+    "data-science",
+    "statistics"
+  ],
+  "math_core": [
+    "probability",
+    "robust-statistics"
+  ],
+  "computational_tools": [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "pyyaml"
+  ],
+  "visualization": [
+    "curves",
+    "scatter",
+    "boxplot"
+  ],
+  "links": []
+}

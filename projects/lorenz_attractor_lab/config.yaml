@@ -1,0 +1,19 @@
+seed: 123
+t_final: 40.0
+dt: 0.005
+params:
+  sigma: 10.0
+  rho: 28.0
+  beta: 2.6666666666666665
+initial_conditions:
+  x0:
+  - 1.0
+  - 1.0
+  - 1.0
+poincare:
+  plane: x=0
+  direction: increasing
+  max_crossings: 5000
+sensitivity:
+  epsilon: 1.0e-06
+  t_final: 10.0

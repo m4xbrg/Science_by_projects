@@ -1,0 +1,48 @@
+{
+  "title": "Logistic Regression Playground \u2014 Synthetic Classification, ROC/PR, Calibration",
+  "domain": [
+    "machine_learning",
+    "statistics"
+  ],
+  "math_core": [
+    "probability",
+    "optimization",
+    "convex_analysis"
+  ],
+  "computational_tools": [
+    "numpy",
+    "scipy",
+    "pandas",
+    "scikit-learn",
+    "matplotlib",
+    "pyyaml",
+    "pyarrow"
+  ],
+  "visualization_type": [
+    "curve_plots",
+    "reliability_diagrams",
+    "contour_fields"
+  ],
+  "portfolio_links": [],
+  "keywords": [
+    "logistic regression",
+    "regularization",
+    "ROC",
+    "PR",
+    "AUC",
+    "AUPRC",
+    "calibration",
+    "Brier score",
+    "Platt scaling",
+    "isotonic regression"
+  ],
+  "reproducibility": {
+    "seed": 42,
+    "data": "synthetic",
+    "splits": {
+      "train": 0.6,
+      "val": 0.2,
+      "test": 0.2
+    }
+  }
+}
