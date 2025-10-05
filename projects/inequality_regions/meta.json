@@ -1,0 +1,27 @@
+{
+  "Domain": [
+    "Applied Mathematics",
+    "Computational Geometry"
+  ],
+  "Math Core": [
+    "Convex sets",
+    "Linear inequalities",
+    "Optimization-adjacent"
+  ],
+  "Computational Tools": [
+    "NumPy",
+    "Pandas",
+    "Matplotlib",
+    "PyYAML",
+    "PyArrow"
+  ],
+  "Visualization Type": [
+    "curve plots",
+    "polygon shading",
+    "heatmaps"
+  ],
+  "Portfolio Links": [
+    "Linear Programming in 2D: Objective Sweeps over Feasible Sets",
+    "Convex Hull Algorithms (Andrew/Graham)"
+  ]
+}
