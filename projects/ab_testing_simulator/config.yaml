@@ -1,0 +1,20 @@
+seed: 42
+alpha: 0.05
+alternative: two-sided
+n_A: 100
+n_B: 100
+test_type: welch_t
+dist: normal
+mu_A: 0.0
+mu_B: 0.2
+sigma_A: 1.0
+sigma_B: 1.0
+p_A: 0.10
+p_B: 0.12
+n_sims: 5000
+grid:
+  kind: effect
+  start: -0.5
+  stop: 0.5
+  num: 21
+output_path: results.parquet
