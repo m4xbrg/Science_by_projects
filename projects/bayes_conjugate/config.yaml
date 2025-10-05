@@ -1,0 +1,19 @@
+seed: 42
+beta_binomial:
+  true_p: 0.35
+  prior:
+    alpha: 1.0
+    beta: 1.0
+  n_trials_per_batch: 20
+  n_batches: 10
+normal_normal:
+  true_mu: 1.5
+  sigma2: 0.5
+  prior:
+    mu0: 0.0
+    tau0_2: 4.0
+  n_per_batch: 25
+  n_batches: 10
+paths:
+  results_dir: results
+  figs_dir: figs

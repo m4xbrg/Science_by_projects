@@ -1,0 +1,29 @@
+{
+  "title": "Bayesian Updating with Conjugate Priors: Beta\u2013Binomial and Normal\u2013Normal",
+  "domain": "statistics",
+  "math_core": [
+    "probability",
+    "Bayesian inference"
+  ],
+  "computational_tools": [
+    "NumPy",
+    "SciPy",
+    "Pandas",
+    "Matplotlib",
+    "PyYAML"
+  ],
+  "visualization_type": [
+    "curve plots",
+    "time-series",
+    "animations (optional)"
+  ],
+  "portfolio_links": [],
+  "keywords": [
+    "conjugate prior",
+    "posterior",
+    "likelihood",
+    "beta-binomial",
+    "normal-normal",
+    "sequential update"
+  ]
+}

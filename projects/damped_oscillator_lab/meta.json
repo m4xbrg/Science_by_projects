@@ -1,0 +1,31 @@
+{
+  "title": "Damped Harmonic Oscillator \u2014 Dynamics, Phase Portraits, and Energy Decay",
+  "domain": [
+    "physics",
+    "classical_mechanics",
+    "vibrations"
+  ],
+  "math_core": [
+    "ODE",
+    "linear_systems"
+  ],
+  "computational_tools": [
+    "numpy",
+    "scipy",
+    "pandas",
+    "matplotlib",
+    "pyyaml",
+    "pyarrow"
+  ],
+  "visualization": [
+    "curve_plots",
+    "phase_portraits",
+    "energy_decay"
+  ],
+  "related_projects": [
+    "Simple Harmonic Oscillator",
+    "Forced Oscillator",
+    "Duffing Oscillator"
+  ],
+  "version": "1.0.0"
+}

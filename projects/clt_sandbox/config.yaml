@@ -1,0 +1,19 @@
+seed: 42
+distribution:
+  name: exponential
+  params:
+    lam: 1.0
+n_list:
+- 1
+- 2
+- 5
+- 10
+- 20
+- 50
+- 100
+- 200
+- 500
+trials_per_n: 4000
+use_population_moments: true
+output_dir: figs
+results_file: results.parquet

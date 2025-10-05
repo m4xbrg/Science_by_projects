@@ -1,0 +1,19 @@
+{
+  "title": "Discrete Linear Map x_{k+1}=A x_k",
+  "domain": "mathematics/dynamical-systems",
+  "math_core": [
+    "linear-algebra",
+    "discrete-dynamics"
+  ],
+  "computational_tools": [
+    "NumPy",
+    "SciPy",
+    "Pandas",
+    "Matplotlib"
+  ],
+  "visualization": [
+    "time-series",
+    "phase-portrait"
+  ],
+  "related_projects": []
+}

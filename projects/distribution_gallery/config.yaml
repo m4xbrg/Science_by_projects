@@ -1,0 +1,35 @@
+seed: 42
+distributions:
+- name: normal
+  type: continuous
+  family: normal
+  params:
+    mu: 0.0
+    sigma: 1.0
+  n_samples: 20000
+  plot:
+    x_min: -4.0
+    x_max: 4.0
+    num_points: 800
+- name: exponential
+  type: continuous
+  family: exponential
+  params:
+    rate: 1.5
+  n_samples: 20000
+  plot:
+    x_min: 0.0
+    x_max: 5.0
+    num_points: 800
+- name: poisson
+  type: discrete
+  family: poisson
+  params:
+    lambda: 3.0
+  n_samples: 20000
+  plot:
+    k_min: 0
+    k_max: 15
+output:
+  results_parquet: results.parquet
+  fig_dir: figs

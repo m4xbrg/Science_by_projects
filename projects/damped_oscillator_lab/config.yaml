@@ -1,0 +1,18 @@
+seed: 42
+t_final: 10.0           # seconds
+dt: 0.002               # seconds
+params:
+  m: 1.0                # kg
+  c: 0.2                # N*s/m
+  k: 4.0                # N/m
+IC:
+  x0: 1.0               # m
+  v0: 0.0               # m/s
+solver:
+  rtol: 1e-8
+  atol: 1e-10
+  method: RK45
+  max_step: null        # let solver adapt; t_eval fixes outputs
+paths:
+  results: results.parquet
+  figs: figs

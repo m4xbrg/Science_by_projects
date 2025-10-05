@@ -1,0 +1,9 @@
+seed: 42
+steps: 200
+# 2D default; works for nD if you change A and x0 consistently
+A:
+  - [0.9, -0.3]
+  - [0.3,  0.9]
+x0: [1.0, 0.2]
+output_dir: "figs"
+save_eigenvectors: false
