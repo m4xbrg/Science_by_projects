@@ -1,0 +1,40 @@
+{
+  "title": "Analytic Geometry Toolkit",
+  "abstract": "Reusable 2D Euclidean geometry core: compute distances, midpoints, and intersections among lines and circles; render scenes and distance matrices.",
+  "domain": [
+    "mathematics",
+    "computational geometry"
+  ],
+  "applications": [
+    "robotics",
+    "computer graphics",
+    "geospatial"
+  ],
+  "math_core": [
+    "analytic geometry",
+    "linear systems",
+    "quadratic forms"
+  ],
+  "computational_tools": [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "pyyaml",
+    "pyarrow"
+  ],
+  "visualization_types": [
+    "curve plots",
+    "annotated scatter",
+    "heatmaps"
+  ],
+  "portfolio_links": {
+    "prerequisites": [
+      "Linear algebra solvers (2x2 systems)"
+    ],
+    "related": [
+      "Collision detection sandbox",
+      "Ray\u2013circle tracer",
+      "Voronoi/Delaunay explorer"
+    ]
+  }
+}
