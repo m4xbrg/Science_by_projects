@@ -1,0 +1,26 @@
+{
+  "id": "eqsolve-20251004233307",
+  "title": "Equation Solver Suite \u2014 Linear & Quadratic Systems",
+  "domain": "computational_mathematics",
+  "math_core": [
+    "linear_algebra",
+    "polynomial_roots"
+  ],
+  "computational_tools": [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "pyyaml",
+    "pyarrow"
+  ],
+  "visualization_type": [
+    "curve_plots",
+    "sensitivity_plots"
+  ],
+  "portfolio_links": [
+    "Matrix Conditioning Explorer",
+    "LU vs QR Stability Benchmark",
+    "Polynomial Root Landscapes"
+  ],
+  "version": "1.0.0"
+}

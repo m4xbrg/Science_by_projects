@@ -1,0 +1,23 @@
+seed: 42
+linear_example:
+  A:
+    - [3.0, 2.0, -1.0]
+    - [2.0, -2.0, 4.0]
+    - [-1.0, 0.5, -1.0]
+  b: [1.0, -2.0, 0.0]
+  eps: 1.0e-12
+  pivoting: true
+quadratic_example:
+  a: 1.0
+  b: 0.0
+  c: 1.0
+  eps: 1.0e-15
+  sweep:
+    b_min: -4.0
+    b_max: 4.0
+    num: 201
+    a: 1.0
+    c: 1.0
+paths:
+  results: data/results.parquet
+  fig_dir: figs
