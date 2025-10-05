@@ -17,7 +17,8 @@ def _import_from_path(path: Path):
     adding its parent directory to sys.path so sibling imports like
     `import model` resolve. We also inject lightweight dummy modules
     for common local imports if they are referenced but missing,
-    so our auto-appended stubs (run/plot_*) can be imported safely.
+    and populate attributes for 'from X import Y' patterns so that
+    top-level imports succeed without executing heavy code.
     """
     import sys, re
 
@@ -27,12 +28,28 @@ def _import_from_path(path: Path):
         sys.path.insert(0, parent)
         added_path = True
 
-    # If file text contains "import X" or "from X import", and X looks local,
-    # pre-insert a dummy module so import-time doesn't fail. Our stubs don't use them.
     text = path.read_text(encoding="utf-8")
+
+    # 1) Create stub modules if referenced
     for name in POSSIBLE_STUBS:
         if re.search(rf"\b(import|from)\s+{re.escape(name)}\b", text) and name not in sys.modules:
             sys.modules[name] = types.ModuleType(name)
+
+    # 2) If file contains "from X import A, B", attach dummy attributes to stub module X
+    for m in re.finditer(r"from\s+([A-Za-z_]\w*)\s+import\s+([A-Za-z0-9_,\s]+)", text):
+        mod_name = m.group(1)
+        if mod_name in POSSIBLE_STUBS:
+            if mod_name not in sys.modules:
+                sys.modules[mod_name] = types.ModuleType(mod_name)
+            target_mod = sys.modules[mod_name]
+            names = [n.strip() for n in m.group(2).split(",") if n.strip()]
+            for attr in names:
+                if not hasattr(target_mod, attr):
+                    # create a harmless dummy class for capitalized names, else a simple object
+                    if attr and attr[0].isupper():
+                        setattr(target_mod, attr, type(attr, (), {})())
+                    else:
+                        setattr(target_mod, attr, object())
 
     try:
         spec = importlib.util.spec_from_file_location(path.stem, path)
