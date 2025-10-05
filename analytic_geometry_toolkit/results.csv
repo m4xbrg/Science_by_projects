@@ -1,0 +1,17 @@
+i,j,distance,_table,mx,my,type,obj1,obj2,k,x,y,relation
+0.0,1.0,5.0,distances,,,,,,,,,
+0.0,2.0,2.23606797749979,distances,,,,,,,,,
+1.0,2.0,5.0990195135927845,distances,,,,,,,,,
+0.0,1.0,,midpoints,1.5,2.0,,,,,,,
+0.0,2.0,,midpoints,1.0,-0.5,,,,,,,
+1.0,2.0,,midpoints,2.5,1.5,,,,,,,
+,,,intersections,,,L-L,0.0,1.0,0.0,0.5,1.0,proper
+,,,intersections,,,L-C,0.0,0.0,0.0,-0.04031242374328481,-0.08062484748656962,secant
+,,,intersections,,,L-C,0.0,0.0,1.0,1.2403124237432848,2.4806248474865695,secant
+,,,intersections,,,L-C,0.0,1.0,,,,disjoint
+,,,intersections,,,L-C,1.0,0.0,0.0,-0.5,1.0,secant
+,,,intersections,,,L-C,1.0,0.0,1.0,2.5,1.0,secant
+,,,intersections,,,L-C,1.0,1.0,0.0,2.1339745962155616,1.0,secant
+,,,intersections,,,L-C,1.0,1.0,1.0,3.8660254037844384,1.0,secant
+,,,intersections,,,C-C,0.0,1.0,0.0,2.1277395808972828,0.010958323589131735,secant
+,,,intersections,,,C-C,0.0,1.0,1.0,2.460495713220364,1.3419828528814566,secant

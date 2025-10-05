@@ -1,0 +1,35 @@
+seed: 42
+epsilon: 1.0e-09
+normalize_lines: true
+scene:
+  points:
+  - - 0.0
+    - 0.0
+  - - 3.0
+    - 4.0
+  - - 2.0
+    - -1.0
+  lines:
+  - from_points:
+    - - 0.0
+      - 0.0
+    - - 1.0
+      - 2.0
+  - coeffs:
+    - 0.0
+    - 1.0
+    - -1.0
+  circles:
+  - center:
+    - 1.0
+    - 1.0
+    radius: 1.5
+  - center:
+    - 3.0
+    - 0.5
+    radius: 1.0
+output:
+  results_parquet: results.parquet
+  fig_dir: figs
+  fig_scene: scene.png
+  fig_distance_matrix: distance_matrix.png
