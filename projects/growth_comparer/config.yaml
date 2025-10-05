@@ -1,0 +1,15 @@
+seed: 42
+t_final: 40.0
+dt: 0.1
+y0: 1.0
+
+models:
+  linear: {a: 1.2}
+  exponential: {r: 0.12}
+  logistic: {r: 0.25, K: 100.0}
+
+crossover:
+  pairs: [["linear","exponential"], ["exponential","logistic"], ["linear","logistic"]]
+  t_max: 60.0
+  n_scan: 4000
+  tol: 1.0e-6

@@ -1,0 +1,32 @@
+{
+  "title": "Growth Comparer \u2014 Linear vs. Exponential vs. Logistic",
+  "slug": "growth-comparer",
+  "abstract": "Unified model comparison with crossover-time analysis using ODEs and robust root-finding.",
+  "domain": [
+    "Applied Math",
+    "Ecology",
+    "Epidemiology",
+    "Economics"
+  ],
+  "math_core": [
+    "ODE",
+    "Root-finding"
+  ],
+  "computational_tools": [
+    "NumPy",
+    "SciPy",
+    "Pandas",
+    "Matplotlib",
+    "PyYAML",
+    "PyArrow"
+  ],
+  "visualization_types": [
+    "curve plots",
+    "phase portraits"
+  ],
+  "portfolio_links": {
+    "precursor": [],
+    "related": []
+  },
+  "created_at": "2025-10-04T23:30:45.566147Z"
+}
