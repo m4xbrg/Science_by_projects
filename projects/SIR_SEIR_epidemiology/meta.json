@@ -1,0 +1,33 @@
+{
+  "title": "SIR/SEIR Epidemiology: Interventions, R\u2080 Estimation, and Uncertainty Ribbons",
+  "domain": "biology (epidemiology)",
+  "math_core": [
+    "ODE",
+    "probability"
+  ],
+  "computational_tools": [
+    "NumPy",
+    "SciPy",
+    "Pandas",
+    "Matplotlib",
+    "PyYAML",
+    "PyArrow"
+  ],
+  "visualization_types": [
+    "curve plots",
+    "phase portraits",
+    "uncertainty ribbons"
+  ],
+  "portfolio_links": [
+    "deterministic ODE solvers (solve_ivp)",
+    "Monte Carlo uncertainty propagation"
+  ],
+  "tags": [
+    "SIR",
+    "SEIR",
+    "Rt",
+    "R0",
+    "interventions",
+    "compartmental models"
+  ]
+}

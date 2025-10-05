@@ -1,0 +1,26 @@
+seed: 42
+alpha: 0.05
+bootstrap_draws: 1000
+reps: 400
+n_list:
+- 10
+- 20
+- 50
+- 100
+statistic_list:
+- mean
+- median
+ci_methods:
+- percentile
+- basic
+distribution:
+  family: lognormal
+  params:
+    mu: 0.0
+    sigma: 0.5
+    df: 5.0
+two_sample:
+  enabled: false
+  n_b: 50
+  effect: 0.0
+results_path: results.parquet

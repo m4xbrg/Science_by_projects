@@ -1,0 +1,20 @@
+seed: 42
+image_path: "data/lena.png"
+color_mode: "rgb"
+svd:
+  method: "randomized"
+  k_max: 128
+  oversample: 10
+  n_power_iter: 1
+ks: [1, 2, 4, 8, 16, 32, 64, 96, 128]
+metrics:
+  ssim:
+    win_size: 11
+    sigma: 1.5
+    K1: 0.01
+    K2: 0.03
+io:
+  save_reconstructions: true
+  recon_dir: "figs/recon/"
+  results_path: "results.parquet"
+  figures_dir: "figs/"

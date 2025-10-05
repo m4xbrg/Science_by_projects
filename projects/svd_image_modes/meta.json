@@ -1,0 +1,55 @@
+{
+  "title": "Image Modes via SVD: Rank-k Reconstruction with PSNR/SSIM",
+  "domain": [
+    "computer_vision",
+    "signal_processing"
+  ],
+  "math_core": [
+    "linear_algebra",
+    "matrix_factorization",
+    "approximation_theory"
+  ],
+  "computational_tools": [
+    "numpy",
+    "scipy",
+    "pillow",
+    "pandas",
+    "pyyaml",
+    "matplotlib"
+  ],
+  "visualization_type": [
+    "curves",
+    "montage"
+  ],
+  "related_projects": [
+    "Matrix Decompositions Overview",
+    "Low-Rank + Sparse (RPCA)"
+  ],
+  "keywords": [
+    "SVD",
+    "rank-k",
+    "PSNR",
+    "SSIM",
+    "eckart-young",
+    "randomized_svd"
+  ],
+  "data_modalities": [
+    "images"
+  ],
+  "repro": {
+    "seed": 42,
+    "image": "data/lena.png",
+    "svd_method": "randomized",
+    "k_grid": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64,
+      96,
+      128
+    ]
+  }
+}

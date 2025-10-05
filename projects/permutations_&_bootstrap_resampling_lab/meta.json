@@ -1,0 +1,26 @@
+{
+  "title": "Resampling Confidence Intervals: Bootstrap & Permutation (Coverage Experiments)",
+  "domain": [
+    "statistics",
+    "data-science"
+  ],
+  "math_core": [
+    "probability",
+    "Monte Carlo"
+  ],
+  "computational_tools": [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "pyarrow"
+  ],
+  "visualization_types": [
+    "curve",
+    "histogram"
+  ],
+  "related_projects": [
+    "nonparametric-estimation",
+    "robust-statistics",
+    "monte-carlo-lab"
+  ]
+}

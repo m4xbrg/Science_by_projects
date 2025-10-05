@@ -1,0 +1,24 @@
+{
+  "title": "Slope-Field & Isocline Viewer with Euler vs. RK4 Error Analysis",
+  "domain": [
+    "mathematics",
+    "computational science"
+  ],
+  "math_core": [
+    "ODE",
+    "numerical analysis"
+  ],
+  "computational_tools": [
+    "NumPy",
+    "Matplotlib",
+    "Pandas",
+    "PyYAML"
+  ],
+  "visualization_type": [
+    "direction fields",
+    "contours (isoclines)",
+    "log\u2013log error plots"
+  ],
+  "portfolio_links": [],
+  "version": "1.0.0"
+}
