@@ -1,0 +1,23 @@
+# Parameters for Chebyshev vs Taylor project
+seed: 0
+interval: [-1.0, 1.0]       # [a, b]
+taylor_center: 0.0          # c
+degree: 8                   # single run n
+degree_list: [1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20]  # optional sweep
+
+# Function specification (choose one)
+function:
+  kind: preset              # 'preset' or 'expr'
+  name: exp_cos3            # when kind='preset': one of ['exp_cos3','runge','abs','logistic']
+  expr: ""                  # when kind='expr': Python expression in x, e.g., "np.exp(x)*np.cos(3*x)"
+
+# Numerical controls
+N_eval: 2001
+N_fit: null                 # default: max(2*n+10, 64)
+fd_h0: 1.0e-2               # finite-difference base step
+fd_richardson_levels: 3     # Richardson extrapolation levels
+
+# Outputs
+output_dir: results
+results_parquet: results.parquet
+sweep_parquet: sweep.parquet
