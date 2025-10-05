@@ -1,0 +1,21 @@
+{
+  "name": "Polynomial Lab",
+  "domain": [
+    "Computational Mathematics"
+  ],
+  "math_core": [
+    "Polynomial algebra",
+    "Numerical linear algebra"
+  ],
+  "computational_tools": [
+    "NumPy",
+    "Pandas",
+    "Matplotlib"
+  ],
+  "visualization_types": [
+    "curve_plot",
+    "complex_plane_scatter"
+  ],
+  "version": "1.0.0",
+  "created": "2025-10-04"
+}
