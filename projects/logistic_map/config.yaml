@@ -1,0 +1,11 @@
+seed: 0
+x0: 0.5
+r_min: 2.5
+r_max: 4.0
+n_r: 800
+n_transient: 800
+n_iter: 1200
+n_keep: 200
+clip_eps: 1.0e-15
+output_bifurcation: bifurcation.parquet
+output_lyapunov: lyapunov.parquet

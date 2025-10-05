@@ -1,0 +1,33 @@
+{
+  "title": "Eigen Explorer \u2014 dominant eigenpairs via Power Method vs numpy.linalg",
+  "domain": [
+    "applied-math",
+    "numerical-linear-algebra"
+  ],
+  "math_core": [
+    "linear-algebra",
+    "iterative-methods"
+  ],
+  "computational_tools": [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "pyyaml"
+  ],
+  "visualization": [
+    "convergence-curves",
+    "geometric-transform"
+  ],
+  "tags": [
+    "eigendecomposition",
+    "power-method",
+    "rayleigh-quotient",
+    "invariant-axes"
+  ],
+  "links": {
+    "related": [
+      "PCA Explorer",
+      "Spectral Graph Explorer"
+    ]
+  }
+}

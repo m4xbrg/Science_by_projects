@@ -1,0 +1,29 @@
+{
+  "title": "Least-Squares Fitter with Residual Diagnostics",
+  "domain": [
+    "statistics",
+    "data-analysis"
+  ],
+  "math_core": [
+    "optimization",
+    "linear-algebra"
+  ],
+  "computational_tools": [
+    "NumPy",
+    "SciPy",
+    "Pandas",
+    "Matplotlib",
+    "PyYAML",
+    "PyArrow"
+  ],
+  "visualization_type": [
+    "curve plots",
+    "scatter plots",
+    "diagnostic plots"
+  ],
+  "portfolio_links": [
+    "Robust Regression (planned)",
+    "Ridge/LASSO (planned)"
+  ],
+  "version": "1.0.0"
+}

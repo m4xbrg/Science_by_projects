@@ -1,0 +1,33 @@
+seed: 42
+k_folds: 5
+degrees:
+- 1
+- 2
+- 3
+- 4
+- 5
+- 7
+- 9
+lambdas:
+- 0.0
+- 0.0001
+- 0.001
+- 0.01
+- 0.1
+scale_features: true
+include_bias: true
+data:
+  use_synthetic: true
+  n_samples: 200
+  noise_sigma: 0.2
+  x_range:
+  - -1.0
+  - 1.0
+  ground_truth: sin(2*pi*x)
+bias_variance:
+  n_trials: 50
+  test_grid_n: 200
+paths:
+  results: results.parquet
+  bias_variance: bias_variance.parquet
+  figs_dir: figs

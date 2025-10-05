@@ -1,0 +1,29 @@
+{
+  "title": "Logistic Map Chaos: Bifurcation Diagram & Lyapunov Exponent",
+  "domain": [
+    "physics",
+    "applied-math",
+    "nonlinear-dynamics"
+  ],
+  "math_core": [
+    "discrete-dynamical-systems",
+    "ergodic-averages"
+  ],
+  "computational_tools": [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "pyyaml",
+    "pyarrow"
+  ],
+  "visualization_types": [
+    "scatter",
+    "curve"
+  ],
+  "related_projects": [
+    "Feigenbaum-constants",
+    "1D-iterated-maps",
+    "Chaos-indicators"
+  ],
+  "created": "2025-10-05T21:38:43.115974Z"
+}

@@ -1,0 +1,14 @@
+seed: 42
+power_method:
+  tol: 1.0e-08
+  max_iter: 200
+  normalize: l2
+matrix:
+  A:
+  - - 3.0
+    - 1.0
+  - - 0.5
+    - 2.0
+x0:
+- 1.0
+- 0.0

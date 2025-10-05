@@ -1,0 +1,25 @@
+{
+  "domain": "data_science",
+  "math_core": [
+    "optimization",
+    "linear_algebra",
+    "probability"
+  ],
+  "computational_tools": [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "pyyaml",
+    "pyarrow"
+  ],
+  "visualization_types": [
+    "curve_plots",
+    "learning_curves",
+    "bias_variance_curves"
+  ],
+  "related_projects": [
+    "OLS_basics",
+    "Regularization_overview",
+    "Kernel_ridge_future"
+  ]
+}

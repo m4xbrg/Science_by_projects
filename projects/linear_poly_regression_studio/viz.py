@@ -1,0 +1,72 @@
+"""
+Visualization utilities: learning curves, MSE vs degree, bias–variance curves.
+"""
+import argparse, yaml, pandas as pd, numpy as np
+from pathlib import Path
+import matplotlib.pyplot as plt
+
+def plot_mse_vs_degree(results_path: str, out_path: str, which: str = "val"):
+    df = pd.read_parquet(results_path)
+    key = "mse_val" if which == "val" else "mse_train"
+    g = df.groupby(["degree", "lambda"], as_index=False)[key].mean()
+    lambdas = sorted(g["lambda"].unique())
+    plt.figure()
+    for lam in lambdas:
+        sub = g[g["lambda"]==lam].sort_values("degree")
+        plt.plot(sub["degree"], sub[key], marker="o", label=f"λ={lam}")
+    plt.xlabel("Polynomial degree")
+    plt.ylabel(f"Mean {key.replace('_',' ').upper()}")
+    plt.title(f"{key.replace('_',' ').title()} vs Degree (averaged over folds)")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(out_path, dpi=180)
+
+def plot_learning_curve(results_path: str, out_path: str):
+    df = pd.read_parquet(results_path)
+    tr = df.groupby(["degree", "lambda"], as_index=False)["mse_train"].mean()
+    va = df.groupby(["degree", "lambda"], as_index=False)["mse_val"].mean()
+    # Choose the lambda that minimizes avg val MSE at each degree and plot train vs val
+    best = va.sort_values(["degree","mse_val"]).groupby("degree", as_index=False).first()[["degree","lambda","mse_val"]]
+    merged = best.merge(tr, on=["degree","lambda"], how="left")
+    plt.figure()
+    plt.plot(merged["degree"], merged["mse_train"], marker="o", label="Train MSE")
+    plt.plot(merged["degree"], merged["mse_val"], marker="o", label="Val MSE (best λ per degree)")
+    plt.xlabel("Polynomial degree")
+    plt.ylabel("Mean MSE")
+    plt.title("Learning Curve: Train vs Validation Error")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(out_path, dpi=180)
+
+def plot_bias_variance(bv_path: str, out_path_prefix: str):
+    df = pd.read_parquet(bv_path)
+    agg = df.groupby("degree", as_index=False)[["bias2","variance","noise"]].mean()
+    plt.figure()
+    plt.plot(agg["degree"], agg["bias2"], marker="o", label="Bias$^2$")
+    plt.plot(agg["degree"], agg["variance"], marker="o", label="Variance")
+    plt.plot(agg["degree"], agg["bias2"]+agg["variance"], marker="o", label="Bias$^2$ + Variance")
+    plt.xlabel("Polynomial degree")
+    plt.ylabel("Average across x")
+    plt.title("Bias–Variance Decomposition")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(f"{out_path_prefix}_aggregate.png", dpi=180)
+
+def main(cfg_path: str):
+    with open(cfg_path, "r") as f:
+        cfg = yaml.safe_load(f)
+    figs = Path(cfg["paths"]["figs_dir"])
+    figs.mkdir(parents=True, exist_ok=True)
+    results_path = cfg["paths"]["results"]
+    bv_path = cfg["paths"]["bias_variance"]
+    plot_mse_vs_degree(results_path, str(figs / "mse_vs_degree_val.png"), which="val")
+    plot_learning_curve(results_path, str(figs / "learning_curve.png"))
+    if Path(bv_path).exists():
+        plot_bias_variance(bv_path, str(figs / "bias_variance"))
+    print("Figures written to", figs)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", type=str, default="config.yaml")
+    args = parser.parse_args()
+    main(args.config)

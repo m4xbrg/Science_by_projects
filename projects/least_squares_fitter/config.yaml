@@ -1,0 +1,17 @@
+seed: 42
+data:
+  path: null
+  n: 120
+  p: 4
+  noise_sigma: 1.0
+model:
+  add_intercept: true
+  solver: "qr"
+  weights: null
+  ridge_lambda: 0.0
+io:
+  results_path: "results.parquet"
+  beta_json_path: "beta.json"
+plots:
+  figs_dir: "figs"
+  residual_flag_threshold_std: 3.0

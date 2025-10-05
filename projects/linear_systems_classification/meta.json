@@ -1,0 +1,32 @@
+{
+  "domain": [
+    "applied-math",
+    "dynamical-systems"
+  ],
+  "math_core": [
+    "ODE",
+    "linear-algebra"
+  ],
+  "computational_tools": [
+    "numpy",
+    "scipy",
+    "matplotlib",
+    "pandas",
+    "pyyaml",
+    "pyarrow"
+  ],
+  "visualization": [
+    "time-series",
+    "phase-portrait",
+    "animation"
+  ],
+  "relations": {
+    "precursor": [
+      "2D Linear Phase Portraits"
+    ],
+    "extension": [
+      "Controllability/Observability Gramians",
+      "Time-varying linear systems"
+    ]
+  }
+}
