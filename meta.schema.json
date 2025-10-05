@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ProjectMeta",
+  "type": "object",
+  "required": ["title","domain","math_core","computational_tools","visualization_types"],
+  "properties": {
+    "title": {"type":"string", "minLength": 3},
+    "domain": {"type":"array","items":{"type":"string"}},
+    "math_core": {"type":"array","items":{"type":"string"}},
+    "computational_tools": {"type":"array","items":{"type":"string"}},
+    "visualization_types": {"type":"array","items":{"type":"string"}},
+    "related_projects": {"type":"array","items":{"type":"string"}},
+    "portfolio_links": {"type":"array","items":{"type":"string"}},
+    "version": {"type":"string"},
+    "created": {"type":"string", "format":"date-time"},
+    "stage": {"type":"string","enum":["scaffolded","runnable","validated","documented"]},
+    "capabilities": {"type":"array","items":{"type":"string"}},
+    "tags": {"type":"array","items":{"type":"string"}}
+  },
+  "additionalProperties": true
+}
