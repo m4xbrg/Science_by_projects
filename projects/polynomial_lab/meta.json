@@ -17,5 +17,7 @@
     "complex_plane_scatter"
   ],
   "version": "1.0.0",
-  "created": "2025-10-04"
+  "created": "2025-10-04",
+  "title": "Polynomial Lab",
+  "stage": "scaffolded"
 }

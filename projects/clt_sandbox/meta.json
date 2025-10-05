@@ -1,7 +1,12 @@
 {
   "title": "Central Limit Sandbox: Visualizing Convergence of Standardized Sums",
-  "domain": "mathematics/statistics",
-  "math_core": "probability",
+  "domain": [
+    "mathematics",
+    "statistics"
+  ],
+  "math_core": [
+    "probability"
+  ],
   "computational_tools": [
     "NumPy",
     "SciPy",
@@ -15,5 +20,7 @@
     "Q\u2013Q plot",
     "convergence curve (KS distance)"
   ],
-  "portfolio_links": []
+  "portfolio_links": [],
+  "stage": "scaffolded",
+  "created": "2025-10-05T23:01:36+00:00"
 }

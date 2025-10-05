@@ -1,7 +1,11 @@
 {
   "title": "Distribution Gallery: PDFs/PMFs, CDFs, and Sample Moments",
-  "domain": "mathematics",
-  "math_core": "probability",
+  "domain": [
+    "mathematics"
+  ],
+  "math_core": [
+    "probability"
+  ],
   "computational_tools": [
     "NumPy",
     "SciPy",
@@ -15,5 +19,10 @@
     "ECDF vs CDF",
     "histogram/PMF overlay"
   ],
-  "portfolio_links": []
+  "portfolio_links": [],
+  "visualization_types": [
+    "curve_plots"
+  ],
+  "stage": "scaffolded",
+  "created": "2025-10-05T23:01:36+00:00"
 }

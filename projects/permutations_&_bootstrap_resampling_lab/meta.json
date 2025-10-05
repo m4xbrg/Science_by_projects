@@ -22,5 +22,7 @@
     "nonparametric-estimation",
     "robust-statistics",
     "monte-carlo-lab"
-  ]
+  ],
+  "stage": "scaffolded",
+  "created": "2025-10-05T23:01:36+00:00"
 }

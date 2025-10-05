@@ -24,5 +24,11 @@
     "Pad\u00e9 vs. Taylor"
   ],
   "project_title": "Chebyshev vs. Taylor on [a,b]: Uniform Approximation and Max-Error Comparisons",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "title": "Chebyshev Vs Taylor",
+  "visualization_types": [
+    "curve_plots"
+  ],
+  "stage": "scaffolded",
+  "created": "2025-10-05T23:01:36+00:00"
 }

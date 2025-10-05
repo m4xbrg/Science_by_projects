@@ -27,5 +27,10 @@
     "Forced Oscillator",
     "Duffing Oscillator"
   ],
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "visualization_types": [
+    "curve_plots"
+  ],
+  "stage": "scaffolded",
+  "created": "2025-10-05T23:01:36+00:00"
 }

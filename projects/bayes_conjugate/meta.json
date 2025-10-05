@@ -1,6 +1,8 @@
 {
   "title": "Bayesian Updating with Conjugate Priors: Beta\u2013Binomial and Normal\u2013Normal",
-  "domain": "statistics",
+  "domain": [
+    "statistics"
+  ],
   "math_core": [
     "probability",
     "Bayesian inference"
@@ -25,5 +27,10 @@
     "beta-binomial",
     "normal-normal",
     "sequential update"
-  ]
+  ],
+  "visualization_types": [
+    "curve_plots"
+  ],
+  "stage": "scaffolded",
+  "created": "2025-10-05T23:01:36+00:00"
 }

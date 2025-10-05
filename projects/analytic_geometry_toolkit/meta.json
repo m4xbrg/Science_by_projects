@@ -27,14 +27,12 @@
     "annotated scatter",
     "heatmaps"
   ],
-  "portfolio_links": {
-    "prerequisites": [
-      "Linear algebra solvers (2x2 systems)"
-    ],
-    "related": [
-      "Collision detection sandbox",
-      "Ray\u2013circle tracer",
-      "Voronoi/Delaunay explorer"
-    ]
-  }
+  "portfolio_links": [
+    "prerequisites: Linear algebra solvers (2x2 systems)",
+    "related: Collision detection sandbox",
+    "related: Ray\u2013circle tracer",
+    "related: Voronoi/Delaunay explorer"
+  ],
+  "stage": "scaffolded",
+  "created": "2025-10-05T23:01:36+00:00"
 }

@@ -10,5 +10,21 @@
   "VisualizationType": [
     "curve plots"
   ],
-  "RelatedProjects": []
+  "RelatedProjects": [],
+  "title": "Multiple Testing Control",
+  "domain": [],
+  "math_core": [],
+  "computational_tools": [
+    "NumPy",
+    "SciPy",
+    "Pandas",
+    "Matplotlib",
+    "PyYAML",
+    "PyArrow"
+  ],
+  "visualization_types": [
+    "curve_plots"
+  ],
+  "stage": "scaffolded",
+  "created": "2025-10-05T23:01:36+00:00"
 }
