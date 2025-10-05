@@ -1,0 +1,28 @@
+{
+  "domain": [
+    "Applied Mathematics",
+    "Numerical Analysis"
+  ],
+  "math_core": [
+    "Approximation Theory",
+    "Orthogonal Polynomials",
+    "Series Expansions"
+  ],
+  "computational_tools": [
+    "NumPy",
+    "Pandas",
+    "Matplotlib"
+  ],
+  "visualization_type": [
+    "curve plots",
+    "error curves",
+    "convergence plot"
+  ],
+  "portfolio_links": [
+    "Remez Minimax Polynomial",
+    "Spectral Methods with Chebyshev Collocation",
+    "Pad\u00e9 vs. Taylor"
+  ],
+  "project_title": "Chebyshev vs. Taylor on [a,b]: Uniform Approximation and Max-Error Comparisons",
+  "version": "1.0.0"
+}
