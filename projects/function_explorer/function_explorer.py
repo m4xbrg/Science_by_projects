@@ -126,9 +126,9 @@ def _to_intervals(sset: sp.Set):
 def _intersect_with_window(intervals, window):
     (a, b) = window
     out = []
-    for I in intervals:
-        aa = max(I.a, a)
-        bb = min(I.b, b)
+    for interval in intervals:
+        aa = max(interval.a, a)
+        bb = min(interval.b, b)
         if aa < bb:
             out.append(DomainInterval(aa, bb))
     return out
@@ -180,18 +180,18 @@ class FunctionExplorer:
         Xs, Ys, segments = [], [], []
         if domain_intervals_window and samples > 0:
             total_len = sum(
-                I.b - I.a
+                interval.b - interval.a
                 for I in domain_intervals_window
-                if np.isfinite(I.a) and np.isfinite(I.b)
+                if np.isfinite(interval.a) and np.isfinite(interval.b)
             )
-            for I in domain_intervals_window:
-                length = I.b - I.a
+            for interval in domain_intervals_window:
+                length = interval.b - interval.a
                 nI = (
                     max(10, int(samples * (length / max(total_len, 1e-9))))
                     if np.isfinite(length)
                     else max(10, samples // len(domain_intervals_window))
                 )
-                xi = np.linspace(I.a, I.b, nI)
+                xi = np.linspace(interval.a, interval.b, nI)
                 f_lmbd = sp.lambdify(x, f, modules=["numpy"])
                 with np.errstate(all="ignore"):
                     yi = f_lmbd(xi).astype(float)
@@ -234,8 +234,8 @@ class FunctionExplorer:
         if not intervals:
             return "∅"
         parts = []
-        for I in intervals:
-            a = "-∞" if _np.isneginf(I.a) else f"{I.a:g}"
-            b = "∞" if _np.isposinf(I.b) else f"{I.b:g}"
+        for interval in intervals:
+            a = "-∞" if _np.isneginf(interval.a) else f"{interval.a:g}"
+            b = "∞" if _np.isposinf(interval.b) else f"{interval.b:g}"
             parts.append(f"({a}, {b})")
         return " ∪ ".join(parts)
