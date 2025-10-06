@@ -1,6 +1,7 @@
 """
 Visualization: time series and 1D phase portrait.
 """
+
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -12,15 +13,17 @@ BASE = Path(__file__).resolve().parent
 FIGS = BASE / "figs"
 FIGS.mkdir(parents=True, exist_ok=True)
 
+
 def load_results() -> pd.DataFrame:
     fp = BASE / "results.parquet"
     return pd.read_parquet(fp)
+
 
 def plot_time_series(df: pd.DataFrame) -> None:
     t = df["t"].to_numpy()
     plt.figure()
     for col in [c for c in df.columns if c.startswith("y_")]:
-        plt.plot(t, df[col].to_numpy(), label=col.replace("y_",""))
+        plt.plot(t, df[col].to_numpy(), label=col.replace("y_", ""))
     plt.xlabel("time")
     plt.ylabel("y(t)")
     plt.legend()
@@ -28,6 +31,7 @@ def plot_time_series(df: pd.DataFrame) -> None:
     plt.tight_layout()
     plt.savefig(FIGS / "time_series.png", dpi=180)
     plt.close()
+
 
 def plot_phase_portrait(df: pd.DataFrame, models: Dict[str, dict]) -> None:
     t = df["t"].to_numpy()
@@ -44,21 +48,26 @@ def plot_phase_portrait(df: pd.DataFrame, models: Dict[str, dict]) -> None:
     plt.savefig(FIGS / "phase_portrait.png", dpi=180)
     plt.close()
 
+
 def main():
     import yaml
+
     cfg = yaml.safe_load((BASE / "config.yaml").read_text())
     df = load_results()
     plot_time_series(df)
     plot_phase_portrait(df, cfg["models"])
 
+
 if __name__ == "__main__":
     main()
+
 
 # --- AUTO-ADDED STUBS: uniform visualization entrypoints ---
 def plot_primary(results_path: str, outdir: str) -> str:
     from pathlib import Path
     import pandas as pd
     import matplotlib.pyplot as plt
+
     Path(outdir).mkdir(parents=True, exist_ok=True)
     df = pd.read_parquet(results_path)
     plt.figure()
@@ -67,7 +76,8 @@ def plot_primary(results_path: str, outdir: str) -> str:
     for c in df.columns:
         try:
             if pd.api.types.is_numeric_dtype(df[c]):
-                col = c; break
+                col = c
+                break
         except Exception:
             pass
     if col is None:
@@ -75,15 +85,20 @@ def plot_primary(results_path: str, outdir: str) -> str:
         col = df.columns[0]
     plt.plot(range(len(df[col])), df[col])
     plt.title("Primary Plot (stub)")
-    plt.xlabel("index"); plt.ylabel(str(col))
+    plt.xlabel("index")
+    plt.ylabel(str(col))
     out = str(Path(outdir) / "primary.png")
-    plt.tight_layout(); plt.savefig(out, dpi=160); plt.close()
+    plt.tight_layout()
+    plt.savefig(out, dpi=160)
+    plt.close()
     return out
+
 
 def plot_secondary(results_path: str, outdir: str) -> str:
     from pathlib import Path
     import pandas as pd
     import matplotlib.pyplot as plt
+
     Path(outdir).mkdir(parents=True, exist_ok=True)
     df = pd.read_parquet(results_path)
     plt.figure()
@@ -92,7 +107,8 @@ def plot_secondary(results_path: str, outdir: str) -> str:
     for c in df.columns:
         try:
             if pd.api.types.is_numeric_dtype(df[c]):
-                col = c; break
+                col = c
+                break
         except Exception:
             pass
     if col is None:
@@ -103,8 +119,10 @@ def plot_secondary(results_path: str, outdir: str) -> str:
     except Exception:
         plt.plot(range(len(df[col])), df[col])
     plt.title("Secondary Plot (stub)")
-    plt.xlabel(str(col)); plt.ylabel("count")
+    plt.xlabel(str(col))
+    plt.ylabel("count")
     out = str(Path(outdir) / "secondary.png")
-    plt.tight_layout(); plt.savefig(out, dpi=160); plt.close()
+    plt.tight_layout()
+    plt.savefig(out, dpi=160)
+    plt.close()
     return out
-

@@ -86,14 +86,17 @@ def plot_secondary(results_path: str, outdir: str) -> str:
     return out
 """
 
+
 def has_func(text: str, name: str) -> bool:
     pattern = rf"^\s*def\s+{name}\s*\("
     return re.search(pattern, text, re.MULTILINE) is not None
 
+
 def ensure_stub(path: Path, stub: str, func_names):
     if not path.exists():
         # create minimal file with stub
-        path.write_text(stub.lstrip() + "\n", encoding="utf-8"); return True
+        path.write_text(stub.lstrip() + "\n", encoding="utf-8")
+        return True
     txt = path.read_text(encoding="utf-8")
     missing = [fn for fn in func_names if not has_func(txt, fn)]
     if not missing:
@@ -102,10 +105,12 @@ def ensure_stub(path: Path, stub: str, func_names):
         f.write("\n" + stub.lstrip() + "\n")
     return True
 
+
 def main():
     changed = 0
     for proj in sorted(PROJECTS.iterdir()):
-        if not proj.is_dir(): continue
+        if not proj.is_dir():
+            continue
         sim = proj / "simulate.py"
         viz = proj / "viz.py"
         # add run() stub if missing
@@ -114,9 +119,12 @@ def main():
             changed += 1
         # add viz stubs if missing
         if ensure_stub(viz, VIZ_STUB, ["plot_primary", "plot_secondary"]):
-            print(f"[retrofit] {proj.name}/viz.py -> added plot_{{primary,secondary}}()")
+            print(
+                f"[retrofit] {proj.name}/viz.py -> added plot_{{primary,secondary}}()"
+            )
             changed += 1
     print(f"Changed {changed} file(s).")
+
 
 if __name__ == "__main__":
     sys.exit(main())

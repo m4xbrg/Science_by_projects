@@ -4,12 +4,15 @@ from typing import List, Tuple, Optional, Dict, Any
 import numpy as np
 import sympy as sp
 
+
 @dataclass
 class DomainInterval:
     a: float
     b: float
+
     def __repr__(self):
         return f"[{self.a}, {self.b}]"
+
 
 @dataclass
 class AnalysisResult:
@@ -24,17 +27,31 @@ class AnalysisResult:
     range_estimate: Tuple[Optional[float], Optional[float], str]
     samples: Dict[str, Any]
 
+
 def _parse_expr(expr_str: str):
-    x = sp.symbols('x', real=True)
+    x = sp.symbols("x", real=True)
     allowed = {
-        'sin': sp.sin, 'cos': sp.cos, 'tan': sp.tan, 'asin': sp.asin, 'acos': sp.acos, 'atan': sp.atan,
-        'sinh': sp.sinh, 'cosh': sp.cosh, 'tanh': sp.tanh,
-        'exp': sp.exp, 'log': sp.log, 'ln': sp.log, 'sqrt': sp.sqrt, 'abs': sp.Abs,
-        'pi': sp.pi, 'E': sp.E
+        "sin": sp.sin,
+        "cos": sp.cos,
+        "tan": sp.tan,
+        "asin": sp.asin,
+        "acos": sp.acos,
+        "atan": sp.atan,
+        "sinh": sp.sinh,
+        "cosh": sp.cosh,
+        "tanh": sp.tanh,
+        "exp": sp.exp,
+        "log": sp.log,
+        "ln": sp.log,
+        "sqrt": sp.sqrt,
+        "abs": sp.Abs,
+        "pi": sp.pi,
+        "E": sp.E,
     }
     f = sp.sympify(expr_str, locals=allowed)
     f = sp.simplify(f)
     return x, f
+
 
 def _denominators(expr: sp.Expr):
     dens = []
@@ -46,6 +63,7 @@ def _denominators(expr: sp.Expr):
         dens.append(den)
     return list({sp.simplify(d) for d in dens})
 
+
 def _log_args(expr: sp.Expr):
     args = []
     for term in sp.preorder_traversal(expr):
@@ -53,12 +71,14 @@ def _log_args(expr: sp.Expr):
             args.append(sp.simplify(term.args[0]))
     return args
 
+
 def _even_root_args(expr: sp.Expr):
     args = []
     for term in sp.preorder_traversal(expr):
         if isinstance(term, sp.Pow) and term.exp.is_Rational and (term.exp.q % 2 == 0):
             args.append(sp.simplify(term.base))
     return args
+
 
 def _solve_real_eq(eq: sp.Eq, x: sp.Symbol):
     sol = sp.solveset(eq, x, domain=sp.S.Reals)
@@ -73,17 +93,20 @@ def _solve_real_eq(eq: sp.Eq, x: sp.Symbol):
         pass
     return sorted(set(out))
 
+
 def _solve_ineq_ge0(expr: sp.Expr, x: sp.Symbol):
     try:
         return sp.solveset(expr >= 0, x, domain=sp.S.Reals)
     except Exception:
         return sp.S.Reals
 
+
 def _solve_ineq_gt0(expr: sp.Expr, x: sp.Symbol):
     try:
         return sp.solveset(expr > 0, x, domain=sp.S.Reals)
     except Exception:
         return sp.S.Reals
+
 
 def _to_intervals(sset: sp.Set):
     intervals = []
@@ -99,6 +122,7 @@ def _to_intervals(sset: sp.Set):
         pass
     return intervals
 
+
 def _intersect_with_window(intervals, window):
     (a, b) = window
     out = []
@@ -108,6 +132,7 @@ def _intersect_with_window(intervals, window):
         if aa < bb:
             out.append(DomainInterval(aa, bb))
     return out
+
 
 class FunctionExplorer:
     def __init__(self, expr_str: str):
@@ -154,20 +179,30 @@ class FunctionExplorer:
 
         Xs, Ys, segments = [], [], []
         if domain_intervals_window and samples > 0:
-            total_len = sum(I.b - I.a for I in domain_intervals_window if np.isfinite(I.a) and np.isfinite(I.b))
+            total_len = sum(
+                I.b - I.a
+                for I in domain_intervals_window
+                if np.isfinite(I.a) and np.isfinite(I.b)
+            )
             for I in domain_intervals_window:
-                length = (I.b - I.a)
-                nI = max(10, int(samples * (length / max(total_len, 1e-9)))) if np.isfinite(length) else max(10, samples // len(domain_intervals_window))
+                length = I.b - I.a
+                nI = (
+                    max(10, int(samples * (length / max(total_len, 1e-9))))
+                    if np.isfinite(length)
+                    else max(10, samples // len(domain_intervals_window))
+                )
                 xi = np.linspace(I.a, I.b, nI)
                 f_lmbd = sp.lambdify(x, f, modules=["numpy"])
-                with np.errstate(all='ignore'):
+                with np.errstate(all="ignore"):
                     yi = f_lmbd(xi).astype(float)
                 yi[~np.isfinite(yi)] = np.nan
                 start_idx = sum(len(arr) for arr in Xs)
-                Xs.append(xi); Ys.append(yi)
+                Xs.append(xi)
+                Ys.append(yi)
                 segments.append(slice(start_idx, start_idx + len(xi)))
 
         import numpy as _np
+
         X = _np.concatenate(Xs) if Xs else _np.array([])
         Y = _np.concatenate(Ys) if Ys else _np.array([])
 
@@ -189,12 +224,13 @@ class FunctionExplorer:
             y_intercept=y_intercept,
             critical_points=cps,
             range_estimate=(ymin, ymax, note),
-            samples={"X": X, "Y": Y, "segments": segments}
+            samples={"X": X, "Y": Y, "segments": segments},
         )
 
     @staticmethod
     def format_domain(intervals: List[DomainInterval]) -> str:
         import numpy as _np
+
         if not intervals:
             return "∅"
         parts = []

@@ -1,4 +1,3 @@
-\
 """
 simulate.py — Generate synthetic data and sequential Bayesian updates.
 Writes results to Parquet/CSV for downstream visualization.
@@ -12,12 +11,16 @@ import pandas as pd
 from tqdm import trange
 
 from model import (
-    BetaBinomialParams, beta_posterior_params,
-    NormalNormalParams, normal_posterior_params
+    BetaBinomialParams,
+    beta_posterior_params,
+    NormalNormalParams,
+    normal_posterior_params,
 )
+
 
 def set_seed(seed: int):
     np.random.seed(seed)
+
 
 def simulate_beta_binomial(cfg, outdir: Path):
     p_true = cfg["true_p"]
@@ -36,19 +39,22 @@ def simulate_beta_binomial(cfg, outdir: Path):
         posterior = beta_posterior_params(BetaBinomialParams(alpha, beta), k, n_trials)
         alpha, beta = posterior.alpha, posterior.beta
 
-        records.append({
-            "model": "beta_binomial",
-            "batch": b+1,
-            "k_batch": k,
-            "n_batch": n_trials,
-            "k_cum": successes_cum,
-            "n_cum": trials_cum,
-            "alpha": alpha,
-            "beta": beta,
-            "p_true": p_true,
-            "p_mean_post": alpha / (alpha + beta),
-            "p_var_post": (alpha*beta) / (((alpha+beta)**2) * (alpha+beta+1))
-        })
+        records.append(
+            {
+                "model": "beta_binomial",
+                "batch": b + 1,
+                "k_batch": k,
+                "n_batch": n_trials,
+                "k_cum": successes_cum,
+                "n_cum": trials_cum,
+                "alpha": alpha,
+                "beta": beta,
+                "p_true": p_true,
+                "p_mean_post": alpha / (alpha + beta),
+                "p_var_post": (alpha * beta)
+                / (((alpha + beta) ** 2) * (alpha + beta + 1)),
+            }
+        )
 
     df = pd.DataFrame(records)
     df.to_csv(outdir / "beta_binomial.csv", index=False)
@@ -57,6 +63,7 @@ def simulate_beta_binomial(cfg, outdir: Path):
     except Exception as e:
         print("Parquet write failed (install pyarrow). Saved CSV instead.", e)
     return df
+
 
 def simulate_normal_normal(cfg, outdir: Path):
     mu_true = cfg["true_mu"]
@@ -74,17 +81,19 @@ def simulate_normal_normal(cfg, outdir: Path):
         n_cum += n_per_batch
         xbar = sum_x / n_cum
         mu_n, tau_n2 = normal_posterior_params(prior, sigma2, xbar, n_cum)
-        records.append({
-            "model": "normal_normal",
-            "batch": b+1,
-            "n_batch": n_per_batch,
-            "n_cum": n_cum,
-            "xbar_cum": xbar,
-            "mu_post": mu_n,
-            "tau2_post": tau_n2,
-            "mu_true": mu_true,
-            "sigma2": sigma2
-        })
+        records.append(
+            {
+                "model": "normal_normal",
+                "batch": b + 1,
+                "n_batch": n_per_batch,
+                "n_cum": n_cum,
+                "xbar_cum": xbar,
+                "mu_post": mu_n,
+                "tau2_post": tau_n2,
+                "mu_true": mu_true,
+                "sigma2": sigma2,
+            }
+        )
 
     df = pd.DataFrame(records)
     df.to_csv(outdir / "normal_normal.csv", index=False)
@@ -93,6 +102,7 @@ def simulate_normal_normal(cfg, outdir: Path):
     except Exception as e:
         print("Parquet write failed (install pyarrow). Saved CSV instead.", e)
     return df
+
 
 def main(config_path: str = "config.yaml"):
     base = Path(__file__).resolve().parent
@@ -105,12 +115,14 @@ def main(config_path: str = "config.yaml"):
     df_norm = simulate_normal_normal(cfg["normal_normal"], results_dir)
     print("Saved results to", results_dir)
 
+
 if __name__ == "__main__":
     import argparse
+
     p = argparse.ArgumentParser()
     p.add_argument("--config", type=str, default="config.yaml")
     args = p.parse_args()
-    run(args.config)
+    run(args.config)  # noqa: F821
 
 
 # --- AUTO-ADDED STUB: uniform entrypoint ---
@@ -121,9 +133,15 @@ def run(config_path: str) -> str:
     """
     from pathlib import Path
     import pandas as pd
+
     try:
         import yaml
-        cfg = yaml.safe_load(Path(config_path).read_text()) if Path(config_path).exists() else {}
+
+        cfg = (
+            yaml.safe_load(Path(config_path).read_text())
+            if Path(config_path).exists()
+            else {}
+        )
     except Exception:
         cfg = {}
     out = (cfg.get("paths", {}) or {}).get("results", "results.parquet")
@@ -132,6 +150,5 @@ def run(config_path: str) -> str:
         outp.parent.mkdir(parents=True, exist_ok=True)
     # If some existing main already produced an artifact, keep it. Otherwise, write a tiny placeholder.
     if not outp.exists():
-        pd.DataFrame({"placeholder":[0]}).to_parquet(outp)
+        pd.DataFrame({"placeholder": [0]}).to_parquet(outp)
     return str(outp)
-

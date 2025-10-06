@@ -1,4 +1,3 @@
-\
 """
 viz.py — Posterior vs Likelihood plots and posterior evolution.
 If results are missing, it will generate them using default config.
@@ -12,9 +11,20 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation, PillowWriter
 
 from model import (
-    BetaBinomialParams, beta_posterior_params, beta_prior_pdf, beta_likelihood_curve, beta_posterior_pdf, grid01,
-    NormalNormalParams, normal_posterior_params, normal_prior_pdf, normal_likelihood_curve, normal_posterior_pdf, gridR
+    BetaBinomialParams,
+    beta_posterior_params,
+    beta_prior_pdf,
+    beta_likelihood_curve,
+    beta_posterior_pdf,
+    grid01,
+    NormalNormalParams,
+    normal_posterior_params,
+    normal_prior_pdf,
+    normal_likelihood_curve,
+    normal_posterior_pdf,
+    gridR,
 )
+
 
 def ensure_results():
     base = Path(__file__).resolve().parent
@@ -22,8 +32,10 @@ def ensure_results():
     results_dir = base / cfg["paths"]["results_dir"]
     if not (results_dir / "beta_binomial.csv").exists():
         import simulate
+
         simulate.main("config.yaml")
     return cfg
+
 
 def plot_beta_posterior_vs_likelihood(cfg):
     base = Path(__file__).resolve().parent
@@ -57,6 +69,7 @@ def plot_beta_posterior_vs_likelihood(cfg):
     plt.close()
     return out
 
+
 def plot_beta_posterior_evolution(cfg):
     base = Path(__file__).resolve().parent
     results_dir = base / cfg["paths"]["results_dir"]
@@ -65,10 +78,13 @@ def plot_beta_posterior_evolution(cfg):
 
     plt.figure()
     plt.plot(df["batch"], df["p_mean_post"], label="Posterior mean")
-    plt.fill_between(df["batch"],
-                     df["p_mean_post"] - 2*np.sqrt(df["p_var_post"]),
-                     df["p_mean_post"] + 2*np.sqrt(df["p_var_post"]),
-                     alpha=0.2, label="±2 SD")
+    plt.fill_between(
+        df["batch"],
+        df["p_mean_post"] - 2 * np.sqrt(df["p_var_post"]),
+        df["p_mean_post"] + 2 * np.sqrt(df["p_var_post"]),
+        alpha=0.2,
+        label="±2 SD",
+    )
     plt.axhline(df["p_true"].iloc[0], linestyle="--", label="True p")
     plt.xlabel("batch")
     plt.ylabel("p")
@@ -79,6 +95,7 @@ def plot_beta_posterior_evolution(cfg):
     plt.savefig(out, dpi=160, bbox_inches="tight")
     plt.close()
     return out
+
 
 def plot_normal_posterior_vs_likelihood(cfg):
     base = Path(__file__).resolve().parent
@@ -94,7 +111,7 @@ def plot_normal_posterior_vs_likelihood(cfg):
     n = int(row["n_cum"])
     sigma2 = float(row["sigma2"])
 
-    mu_grid = gridR(mu_n - 4*np.sqrt(tau_n2), mu_n + 4*np.sqrt(tau_n2), 800)
+    mu_grid = gridR(mu_n - 4 * np.sqrt(tau_n2), mu_n + 4 * np.sqrt(tau_n2), 800)
     prior_y = normal_prior_pdf(mu_grid, prior)
     like_y = normal_likelihood_curve(mu_grid, xbar, n, sigma2)
     like_y = like_y / like_y.max() * prior_y.max()
@@ -114,6 +131,7 @@ def plot_normal_posterior_vs_likelihood(cfg):
     plt.close()
     return out
 
+
 def plot_normal_posterior_evolution(cfg):
     base = Path(__file__).resolve().parent
     results_dir = base / cfg["paths"]["results_dir"]
@@ -123,7 +141,13 @@ def plot_normal_posterior_evolution(cfg):
     plt.figure()
     plt.plot(df["batch"], df["mu_post"], label="Posterior mean μ_n")
     sd = np.sqrt(df["tau2_post"])
-    plt.fill_between(df["batch"], df["mu_post"] - 2*sd, df["mu_post"] + 2*sd, alpha=0.2, label="±2 SD")
+    plt.fill_between(
+        df["batch"],
+        df["mu_post"] - 2 * sd,
+        df["mu_post"] + 2 * sd,
+        alpha=0.2,
+        label="±2 SD",
+    )
     plt.axhline(df["mu_true"].iloc[0], linestyle="--", label="True μ")
     plt.xlabel("batch")
     plt.ylabel("μ")
@@ -135,7 +159,9 @@ def plot_normal_posterior_evolution(cfg):
     plt.close()
     return out
 
+
 # ----------------- Optional Animations -----------------
+
 
 def animate_beta_posterior(cfg, out_path="figs/beta_posterior_anim.gif"):
     base = Path(__file__).resolve().parent
@@ -145,9 +171,9 @@ def animate_beta_posterior(cfg, out_path="figs/beta_posterior_anim.gif"):
     prior = BetaBinomialParams(**cfg["beta_binomial"]["prior"])
     p = grid01(600)
     fig, ax = plt.subplots()
-    line_prior, = ax.plot(p, beta_prior_pdf(p, prior), label="Prior")
-    line_post, = ax.plot([], [], label="Posterior")
-    ax.set_xlim(0,1)
+    (line_prior,) = ax.plot(p, beta_prior_pdf(p, prior), label="Prior")
+    (line_post,) = ax.plot([], [], label="Posterior")
+    ax.set_xlim(0, 1)
     ax.set_ylim(0, None)
     ax.set_xlabel("p")
     ax.set_ylabel("density")
@@ -173,6 +199,7 @@ def animate_beta_posterior(cfg, out_path="figs/beta_posterior_anim.gif"):
     plt.close(fig)
     return out
 
+
 def animate_normal_posterior(cfg, out_path="figs/normal_posterior_anim.gif"):
     base = Path(__file__).resolve().parent
     results_dir = base / cfg["paths"]["results_dir"]
@@ -182,11 +209,11 @@ def animate_normal_posterior(cfg, out_path="figs/normal_posterior_anim.gif"):
 
     mu_center = df["mu_post"].iloc[-1]
     sd_final = np.sqrt(df["tau2_post"].iloc[-1])
-    mu_grid = gridR(mu_center - 5*sd_final, mu_center + 5*sd_final, 600)
+    mu_grid = gridR(mu_center - 5 * sd_final, mu_center + 5 * sd_final, 600)
 
     fig, ax = plt.subplots()
-    line_prior, = ax.plot(mu_grid, normal_prior_pdf(mu_grid, prior), label="Prior")
-    line_post, = ax.plot([], [], label="Posterior")
+    (line_prior,) = ax.plot(mu_grid, normal_prior_pdf(mu_grid, prior), label="Prior")
+    (line_post,) = ax.plot([], [], label="Posterior")
     ax.set_xlabel("μ")
     ax.set_ylabel("density")
     ax.legend()
@@ -210,6 +237,7 @@ def animate_normal_posterior(cfg, out_path="figs/normal_posterior_anim.gif"):
     plt.close(fig)
     return out
 
+
 def main():
     cfg = ensure_results()
     p1 = plot_beta_posterior_vs_likelihood(cfg)
@@ -218,14 +246,17 @@ def main():
     p4 = plot_normal_posterior_evolution(cfg)
     print("Saved:", p1, p2, p3, p4)
 
+
 if __name__ == "__main__":
     main()
+
 
 # --- AUTO-ADDED STUBS: uniform visualization entrypoints ---
 def plot_primary(results_path: str, outdir: str) -> str:
     from pathlib import Path
     import pandas as pd
     import matplotlib.pyplot as plt
+
     Path(outdir).mkdir(parents=True, exist_ok=True)
     df = pd.read_parquet(results_path)
     plt.figure()
@@ -234,7 +265,8 @@ def plot_primary(results_path: str, outdir: str) -> str:
     for c in df.columns:
         try:
             if pd.api.types.is_numeric_dtype(df[c]):
-                col = c; break
+                col = c
+                break
         except Exception:
             pass
     if col is None:
@@ -242,15 +274,20 @@ def plot_primary(results_path: str, outdir: str) -> str:
         col = df.columns[0]
     plt.plot(range(len(df[col])), df[col])
     plt.title("Primary Plot (stub)")
-    plt.xlabel("index"); plt.ylabel(str(col))
+    plt.xlabel("index")
+    plt.ylabel(str(col))
     out = str(Path(outdir) / "primary.png")
-    plt.tight_layout(); plt.savefig(out, dpi=160); plt.close()
+    plt.tight_layout()
+    plt.savefig(out, dpi=160)
+    plt.close()
     return out
+
 
 def plot_secondary(results_path: str, outdir: str) -> str:
     from pathlib import Path
     import pandas as pd
     import matplotlib.pyplot as plt
+
     Path(outdir).mkdir(parents=True, exist_ok=True)
     df = pd.read_parquet(results_path)
     plt.figure()
@@ -259,7 +296,8 @@ def plot_secondary(results_path: str, outdir: str) -> str:
     for c in df.columns:
         try:
             if pd.api.types.is_numeric_dtype(df[c]):
-                col = c; break
+                col = c
+                break
         except Exception:
             pass
     if col is None:
@@ -270,8 +308,10 @@ def plot_secondary(results_path: str, outdir: str) -> str:
     except Exception:
         plt.plot(range(len(df[col])), df[col])
     plt.title("Secondary Plot (stub)")
-    plt.xlabel(str(col)); plt.ylabel("count")
+    plt.xlabel(str(col))
+    plt.ylabel("count")
     out = str(Path(outdir) / "secondary.png")
-    plt.tight_layout(); plt.savefig(out, dpi=160); plt.close()
+    plt.tight_layout()
+    plt.savefig(out, dpi=160)
+    plt.close()
     return out
-

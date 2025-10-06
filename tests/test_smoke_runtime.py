@@ -9,6 +9,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 PROJECTS = ROOT / "projects"
 
+
 def _local_module_names(pyfile: Path):
     parent = pyfile.parent
     mods = {p.stem for p in parent.glob("*.py")}
@@ -16,6 +17,7 @@ def _local_module_names(pyfile: Path):
         if d.is_dir() and (d / "__init__.py").exists():
             mods.add(d.name)
     return mods
+
 
 def _names_imported_from_modules(pyfile: Path, local_mods: set[str]):
     text = pyfile.read_text(encoding="utf-8")
@@ -37,8 +39,10 @@ def _names_imported_from_modules(pyfile: Path, local_mods: set[str]):
                     bare_imports.add(mod)
     return from_imports, bare_imports
 
+
 def _install_stub_modules(pyfile: Path):
     import sys
+
     local_mods = _local_module_names(pyfile)
     from_imports, bare_imports = _names_imported_from_modules(pyfile, local_mods)
 
@@ -56,8 +60,10 @@ def _install_stub_modules(pyfile: Path):
                 else:
                     setattr(stub, attr, object())
 
+
 def _import_from_path(path: Path):
     import sys
+
     parent = str(path.parent.resolve())
     added_path = False
     if parent not in sys.path:
@@ -79,6 +85,7 @@ def _import_from_path(path: Path):
             except ValueError:
                 pass
 
+
 def test_smoke_each_project_runtime():
     """
     For each project:
@@ -96,8 +103,12 @@ def test_smoke_each_project_runtime():
         viz_mod = _import_from_path(viz)
 
         assert hasattr(sim_mod, "run"), f"{proj.name}: simulate.run missing"
-        assert hasattr(viz_mod, "plot_primary"), f"{proj.name}: viz.plot_primary missing"
-        assert hasattr(viz_mod, "plot_secondary"), f"{proj.name}: viz.plot_secondary missing"
+        assert hasattr(
+            viz_mod, "plot_primary"
+        ), f"{proj.name}: viz.plot_primary missing"
+        assert hasattr(
+            viz_mod, "plot_secondary"
+        ), f"{proj.name}: viz.plot_secondary missing"
 
         with tempfile.TemporaryDirectory() as td:
             td = Path(td)
@@ -116,7 +127,9 @@ def test_smoke_each_project_runtime():
                 df.to_parquet(out_parquet)
                 res_path = out_parquet
 
-            assert res_path.exists(), f"{proj.name}: simulate.run did not produce parquet"
+            assert (
+                res_path.exists()
+            ), f"{proj.name}: simulate.run did not produce parquet"
 
             # parquet should be readable
             _ = pd.read_parquet(res_path)

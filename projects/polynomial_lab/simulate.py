@@ -3,12 +3,14 @@ import yaml, json, numpy as np, pandas as pd
 from pathlib import Path
 from model import PolynomialLab
 
+
 def try_write_parquet(df: pd.DataFrame, path: str) -> bool:
     try:
         df.to_parquet(path)  # requires pyarrow or fastparquet
         return True
     except Exception:
         return False
+
 
 def main():
     cfg = yaml.safe_load(Path("config.yaml").read_text())
@@ -35,10 +37,9 @@ def main():
         q, rem, b = lab.synthetic_division(r_div)
         syn = {"r": r_div, "remainder": complex(rem), "table": [complex(x) for x in b]}
 
-    roots_df = pd.DataFrame({
-        "root_real": np.real(res.roots),
-        "root_imag": np.imag(res.roots)
-    })
+    roots_df = pd.DataFrame(
+        {"root_real": np.real(res.roots), "root_imag": np.imag(res.roots)}
+    )
 
     # Try parquet; if not available, write CSV
     parquet_ok = try_write_parquet(roots_df, io["results_parquet"])
@@ -48,16 +49,21 @@ def main():
     summary = {
         "coeffs_high_to_low": [complex(c) for c in lab.a],
         "roots": [complex(r) for r in res.roots],
-        "clustered": [(complex(r), int(m)) for r,m in res.clustered],
-        "factors_C": [(complex(r), int(m)) for r,m in factors_C],
-        "factors_R": [{"coeffs": [float(np.real(c)) for c in coeffs], "m": int(m)} for coeffs, m in factors_R],
+        "clustered": [(complex(r), int(m)) for r, m in res.clustered],
+        "factors_C": [(complex(r), int(m)) for r, m in factors_C],
+        "factors_R": [
+            {"coeffs": [float(np.real(c)) for c in coeffs], "m": int(m)}
+            for coeffs, m in factors_R
+        ],
         "verify": verify,
-        "synthetic_division": syn
+        "synthetic_division": syn,
     }
     Path("results.json").write_text(json.dumps(summary, indent=2, default=str))
 
+
 if __name__ == "__main__":
     main()
+
 
 # --- AUTO-ADDED STUB: uniform entrypoint ---
 def run(config_path: str) -> str:
@@ -67,9 +73,15 @@ def run(config_path: str) -> str:
     """
     from pathlib import Path
     import pandas as pd
+
     try:
         import yaml
-        cfg = yaml.safe_load(Path(config_path).read_text()) if Path(config_path).exists() else {}
+
+        cfg = (
+            yaml.safe_load(Path(config_path).read_text())
+            if Path(config_path).exists()
+            else {}
+        )
     except Exception:
         cfg = {}
     out = (cfg.get("paths", {}) or {}).get("results", "results.parquet")
@@ -78,6 +90,5 @@ def run(config_path: str) -> str:
         outp.parent.mkdir(parents=True, exist_ok=True)
     # If some existing main already produced an artifact, keep it. Otherwise, write a tiny placeholder.
     if not outp.exists():
-        pd.DataFrame({"placeholder":[0]}).to_parquet(outp)
+        pd.DataFrame({"placeholder": [0]}).to_parquet(outp)
     return str(outp)
-

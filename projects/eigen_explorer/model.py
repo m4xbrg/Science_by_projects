@@ -1,11 +1,13 @@
 import numpy as np
 from typing import Dict, Tuple, List
 
+
 def rayleigh_quotient(x: np.ndarray, A: np.ndarray) -> float:
     """Return Rayleigh quotient rho(x) = (x^T A x) / (x^T x)."""
     num = float(x.T @ (A @ x))
     den = float(x.T @ x)
     return num / den
+
 
 def normalize(x: np.ndarray, norm: str = "l2") -> np.ndarray:
     """Normalize a vector with the specified norm."""
@@ -19,12 +21,15 @@ def normalize(x: np.ndarray, norm: str = "l2") -> np.ndarray:
         raise ValueError("Zero vector cannot be normalized.")
     return x / s
 
-def power_method(A: np.ndarray,
-                 x0: np.ndarray,
-                 tol: float = 1e-8,
-                 max_iter: int = 1000,
-                 norm: str = "l2",
-                 return_history: bool = True) -> Tuple[float, np.ndarray, List[Dict]]:
+
+def power_method(
+    A: np.ndarray,
+    x0: np.ndarray,
+    tol: float = 1e-8,
+    max_iter: int = 1000,
+    norm: str = "l2",
+    return_history: bool = True,
+) -> Tuple[float, np.ndarray, List[Dict]]:
     """Compute the dominant eigenpair of A via the power method.
 
     Parameters
@@ -55,15 +60,11 @@ def power_method(A: np.ndarray,
         lam = rayleigh_quotient(x, A)
         residual = np.linalg.norm(A @ x - lam * x)
         if return_history:
-            history.append({
-                "k": k,
-                "lambda": lam,
-                "residual": residual,
-                "x": x.copy()
-            })
+            history.append({"k": k, "lambda": lam, "residual": residual, "x": x.copy()})
         if residual < tol:
             break
     return lam, x, history
+
 
 def eig_invariant_axes(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     """Return (eigenvalues, eigenvectors) via numpy.linalg.eig.

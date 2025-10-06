@@ -2,10 +2,12 @@
 Core model definitions for parameter identification on ODEs (pendulum case).
 Provides the ODE right-hand side and helpers for simulation and sensitivities.
 """
+
 from __future__ import annotations
 import numpy as np
 from typing import Dict, Callable, Tuple
 from scipy.integrate import solve_ivp
+
 
 def rhs(t: float, x: np.ndarray, params: Dict[str, float]) -> np.ndarray:
     """
@@ -25,11 +27,14 @@ def rhs(t: float, x: np.ndarray, params: Dict[str, float]) -> np.ndarray:
     x1, x2 = x
     return np.array([x2, -theta1 * np.sin(x1) - theta2 * x2])
 
-def simulate_trajectory(t_grid: np.ndarray,
-                        x0: np.ndarray,
-                        params: Dict[str, float],
-                        rtol: float = 1e-8,
-                        atol: float = 1e-8) -> np.ndarray:
+
+def simulate_trajectory(
+    t_grid: np.ndarray,
+    x0: np.ndarray,
+    params: Dict[str, float],
+    rtol: float = 1e-8,
+    atol: float = 1e-8,
+) -> np.ndarray:
     """
     Integrate the ODE on a fixed grid using SciPy's solve_ivp (RK45).
     Args:
@@ -40,14 +45,21 @@ def simulate_trajectory(t_grid: np.ndarray,
     Returns:
         X: array of shape (len(t_grid), 2) with states at t_grid points
     """
+
     def fun(t, x):  # bind params
         return rhs(t, x, params)
-    sol = solve_ivp(fun, (t_grid[0], t_grid[-1]), x0, t_eval=t_grid, rtol=rtol, atol=atol)
+
+    sol = solve_ivp(
+        fun, (t_grid[0], t_grid[-1]), x0, t_eval=t_grid, rtol=rtol, atol=atol
+    )
     if not sol.success:
         raise RuntimeError(f"ODE integration failed: {sol.message}")
     return sol.y.T
 
-def add_observation_noise(x: np.ndarray, observe: str, noise_std: float, rng: np.random.Generator) -> np.ndarray:
+
+def add_observation_noise(
+    x: np.ndarray, observe: str, noise_std: float, rng: np.random.Generator
+) -> np.ndarray:
     """
     Generate noisy observations from the trajectory.
     Args:
@@ -61,9 +73,10 @@ def add_observation_noise(x: np.ndarray, observe: str, noise_std: float, rng: np
     idx = 0 if observe == "x1" else 1
     return x[:, idx] + rng.normal(0.0, noise_std, size=x.shape[0])
 
-def integrate_with_params(theta: np.ndarray,
-                          t_grid: np.ndarray,
-                          x0: np.ndarray) -> Callable[[Dict[str, float]], np.ndarray]:
+
+def integrate_with_params(
+    theta: np.ndarray, t_grid: np.ndarray, x0: np.ndarray
+) -> Callable[[Dict[str, float]], np.ndarray]:
     """
     Convenience wrapper that returns simulator bound to theta vector.
     Args:
@@ -74,6 +87,8 @@ def integrate_with_params(theta: np.ndarray,
         function(params_dict) -> states
     """
     params = {"theta1": float(theta[0]), "theta2": float(theta[1])}
+
     def _simulate(_: Dict[str, float] = params) -> np.ndarray:
         return simulate_trajectory(t_grid, x0, params)
+
     return _simulate

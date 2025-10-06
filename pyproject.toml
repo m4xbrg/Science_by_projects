@@ -1,0 +1,11 @@
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+
+ignore = ["E401","E741","F401","F811","F841"]
+[tool.ruff.per-file-ignores]
+ "projects/clt_sandbox/viz.py" = ["F821"]
+ "projects/matrix_workbench/model.py" = ["E999"]
+ "projects/transformations_playground/model.py" = ["E999"]

@@ -3,7 +3,10 @@ import numpy as np
 from numpy.linalg import norm, cond
 from typing import Dict, Tuple
 
-def gram_schmidt(A: np.ndarray, method: str = "mgs", reorth: int = 0) -> Tuple[np.ndarray, np.ndarray]:
+
+def gram_schmidt(
+    A: np.ndarray, method: str = "mgs", reorth: int = 0
+) -> Tuple[np.ndarray, np.ndarray]:
     """Perform Gram–Schmidt orthogonalization.
     Parameters
     ----------
@@ -70,10 +73,11 @@ def compute_metrics(A: np.ndarray, Q: np.ndarray, R: np.ndarray) -> Dict[str, fl
       - cond2_A: 2-norm condition number of A
     """
     from numpy.linalg import norm
+
     G = Q.T @ Q
     n = G.shape[0]
-    I = np.eye(n, dtype=G.dtype)
-    ortho_frob = norm(G - I, "fro")
+    I_mat = np.eye(n, dtype=G.dtype)
+    ortho_frob = norm(G - I_mat, "fro")
     resid_frob_rel = norm(A - Q @ R, "fro") / max(norm(A, "fro"), np.finfo(float).eps)
     G_off = G - np.diag(np.diag(G))
     max_offdiag_abs = np.max(np.abs(G_off)) if n > 1 else 0.0
@@ -82,7 +86,9 @@ def compute_metrics(A: np.ndarray, Q: np.ndarray, R: np.ndarray) -> Dict[str, fl
         cos_vals = np.clip(np.abs(G - np.eye(n)), 0, 1)
         idx = np.triu_indices(n, 1)
         cos_max = np.max(cos_vals[idx]) if idx[0].size else 0.0
-        max_pairwise_angle_deg = float(np.degrees(np.arccos(1 - cos_max))) if cos_max <= 1 else 0.0
+        max_pairwise_angle_deg = (
+            float(np.degrees(np.arccos(1 - cos_max))) if cos_max <= 1 else 0.0
+        )
     else:
         max_pairwise_angle_deg = 0.0
 
@@ -113,7 +119,8 @@ def make_matrix(cfg: dict):
     info : dict with 'kind'
     """
     rng = np.random.default_rng(cfg.get("seed", None))
-    m = cfg["m"]; n = cfg["n"]
+    m = cfg["m"]
+    n = cfg["n"]
     kind = cfg.get("matrix", {}).get("kind", "gaussian")
     noise = cfg.get("matrix", {}).get("noise_level", 0.0)
     scale = cfg.get("matrix", {}).get("scale", 1.0)
@@ -125,7 +132,7 @@ def make_matrix(cfg: dict):
         rho = float(cfg.get("matrix", {}).get("correlation", 0.95))
         idx = np.arange(m)
         Sigma = rho ** np.abs(idx[:, None] - idx[None, :])
-        L = np.linalg.cholesky(Sigma + 1e-12*np.eye(m))
+        L = np.linalg.cholesky(Sigma + 1e-12 * np.eye(m))
         A = L @ rng.standard_normal((m, n), dtype=dtype) * scale
     elif kind == "hilbert":
         i = np.arange(1, m + 1)[:, None]

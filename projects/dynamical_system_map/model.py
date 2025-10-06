@@ -2,10 +2,13 @@ import numpy as np
 from numpy.typing import ArrayLike
 from dataclasses import dataclass
 
+
 @dataclass
 class MapParams:
     """Container for map parameters."""
+
     A: np.ndarray  # (n,n) matrix
+
 
 def step(k: int, x: np.ndarray, params: MapParams) -> np.ndarray:
     """
@@ -27,6 +30,7 @@ def step(k: int, x: np.ndarray, params: MapParams) -> np.ndarray:
     """
     # Math → code: x_{k+1} = A x_k
     return params.A @ x
+
 
 def eig_info(A: ArrayLike, save_vectors: bool = False) -> dict:
     """

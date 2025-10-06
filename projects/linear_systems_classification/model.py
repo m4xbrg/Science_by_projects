@@ -1,9 +1,9 @@
-
 import numpy as np
 from dataclasses import dataclass
 from typing import Tuple, Dict, Any
 from numpy.typing import ArrayLike
 from scipy.linalg import expm, eig
+
 
 @dataclass
 class LinearSystem:
@@ -14,9 +14,12 @@ class LinearSystem:
     A : np.ndarray
         System matrix (n x n).
     """
+
     A: np.ndarray
 
-    def rhs(self, t: float, x: ArrayLike, params: Dict[str, Any] | None = None) -> np.ndarray:
+    def rhs(
+        self, t: float, x: ArrayLike, params: Dict[str, Any] | None = None
+    ) -> np.ndarray:
         """
         Right-hand side of the ODE: dx/dt = A x.
         Parameters

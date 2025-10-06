@@ -5,16 +5,25 @@ import math, cmath
 
 Number = Union[float, complex]
 
+
 @dataclass
 class SolveResult:
     solution: Union[List[Number], Tuple[Number, Number], None]
     status: str
     steps: List[Dict[str, Any]]
 
+
 def snapshot_augmented(A: List[List[Number]], b: List[Number]) -> List[List[Number]]:
     return [row[:] + [b[i]] for i, row in enumerate(A)]
 
-def gaussian_elimination(A_in: List[List[Number]], b_in: List[Number], eps: float = 1e-12, pivoting: bool = True, record_snapshots: bool = True) -> SolveResult:
+
+def gaussian_elimination(
+    A_in: List[List[Number]],
+    b_in: List[Number],
+    eps: float = 1e-12,
+    pivoting: bool = True,
+    record_snapshots: bool = True,
+) -> SolveResult:
     n = len(A_in)
     A = [row[:] for row in A_in]
     b = b_in[:]
@@ -28,7 +37,15 @@ def gaussian_elimination(A_in: List[List[Number]], b_in: List[Number], eps: floa
                 A[k], A[pivot_row] = A[pivot_row], A[k]
                 b[k], b[pivot_row] = b[pivot_row], b[k]
                 if record_snapshots:
-                    steps.append({"phase": "pivot", "k": k, "pivot_row": pivot_row, "pivot_value": A[k][k], "Aug": snapshot_augmented(A, b)})
+                    steps.append(
+                        {
+                            "phase": "pivot",
+                            "k": k,
+                            "pivot_row": pivot_row,
+                            "pivot_value": A[k][k],
+                            "Aug": snapshot_augmented(A, b),
+                        }
+                    )
         if abs(A[k][k]) < eps:
             steps.append({"phase": "singular", "k": k, "pivot": A[k][k]})
             return SolveResult(None, "singular", steps)
@@ -40,7 +57,15 @@ def gaussian_elimination(A_in: List[List[Number]], b_in: List[Number], eps: floa
                 A[i][j] -= m * A[k][j]
             b[i] -= m * b[k]
             if record_snapshots:
-                steps.append({"phase": "eliminate", "i": i, "k": k, "m": m, "Aug": snapshot_augmented(A, b)})
+                steps.append(
+                    {
+                        "phase": "eliminate",
+                        "i": i,
+                        "k": k,
+                        "m": m,
+                        "Aug": snapshot_augmented(A, b),
+                    }
+                )
     x = [0] * n
     for i in range(n - 1, -1, -1):
         s = sum(A[i][j] * x[j] for j in range(i + 1, n))
@@ -54,12 +79,13 @@ def gaussian_elimination(A_in: List[List[Number]], b_in: List[Number], eps: floa
         steps.append({"phase": "done", "solution": x})
     return SolveResult(x, "ok", steps)
 
+
 def solve_quadratic(a: Number, b: Number, c: Number, eps: float = 1e-15) -> SolveResult:
     steps: List[Dict[str, Any]] = []
     if abs(a) < eps:
         steps.append({"phase": "degenerate", "a": a})
         return SolveResult(None, "degenerate", steps)
-    Delta = b*b - 4*a*c
+    Delta = b * b - 4 * a * c
     steps.append({"phase": "discriminant", "Delta": Delta})
     if isinstance(Delta, complex) or Delta < 0:
         sqrtD = cmath.sqrt(Delta)
@@ -75,10 +101,18 @@ def solve_quadratic(a: Number, b: Number, c: Number, eps: float = 1e-15) -> Solv
             x2 = c / q
             branch = "stable_q"
         else:
-            x1 =  sqrtD / (2 * a)
+            x1 = sqrtD / (2 * a)
             x2 = -sqrtD / (2 * a)
             branch = "b_zero"
         status = "real" if Delta > 0 else "repeated"
-        steps.append({"phase": "real_roots", "branch": branch, "sqrtD": sqrtD, "x1": x1, "x2": x2})
+        steps.append(
+            {
+                "phase": "real_roots",
+                "branch": branch,
+                "sqrtD": sqrtD,
+                "x1": x1,
+                "x2": x2,
+            }
+        )
     steps.append({"phase": "done", "status": status})
     return SolveResult((x1, x2), status, steps)

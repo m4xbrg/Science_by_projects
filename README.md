@@ -6,12 +6,12 @@ Unified, ontology-ready computational science portfolio.
 
 | Project | Title | Domain | Math Core | Stage |
 |---|---|---|---|---|
-| `SIR_SEIR_epidemiology` | SIR/SEIR Epidemiology: Interventions, R₀ Estimation, and Uncertainty Ribbons | biology, epidemiology | ODE, probability | scaffolded |
+| `SIR_SEIR_epidemiology` | SIR/SEIR Epidemiology: Interventions, R₀ Estimation, and Uncertainty Ribbons | biology, epidemiology | ODE, probability | runnable |
 | `analytic_geometry_toolkit` | Analytic Geometry Toolkit | mathematics, computational geometry | analytic geometry, linear systems, quadratic forms | scaffolded |
 | `bayes_conjugate` | Bayesian Updating with Conjugate Priors: Beta–Binomial and Normal–Normal | statistics | probability, Bayesian inference | scaffolded |
 | `chebyshev_vs_taylor` | Chebyshev Vs Taylor | Applied Mathematics, Numerical Analysis | Approximation Theory, Orthogonal Polynomials, Series Expansions | scaffolded |
 | `clt_sandbox` | Central Limit Sandbox: Visualizing Convergence of Standardized Sums | mathematics, statistics | probability | scaffolded |
-| `damped_oscillator_lab` | Damped Harmonic Oscillator — Dynamics, Phase Portraits, and Energy Decay | physics, classical_mechanics, vibrations | ODE, linear_systems | scaffolded |
+| `damped_oscillator_lab` | Damped Harmonic Oscillator — Dynamics, Phase Portraits, and Energy Decay | physics, classical_mechanics, vibrations | ODE, linear_systems | runnable |
 | `distribution_gallery` | Distribution Gallery: PDFs/PMFs, CDFs, and Sample Moments | mathematics | probability | scaffolded |
 | `dynamical_system_map` | Discrete Linear Map x_{k+1}=A x_k | mathematics, dynamical, systems | linear-algebra, discrete-dynamics | scaffolded |
 | `eigen_explorer` | Eigen Explorer — dominant eigenpairs via Power Method vs numpy.linalg | applied-math, numerical-linear-algebra | linear-algebra, iterative-methods | scaffolded |
@@ -26,7 +26,7 @@ Unified, ontology-ready computational science portfolio.
 | `logistic_riccati_explorer` | Logistic/Riccati Explorer: Analytic vs. Numeric Solutions; Parameter Sensitivity | mathematical biology, applied mathematics | ODEs, sensitivity analysis | scaffolded |
 | `logreg_playground` | Logistic Regression Playground — Synthetic Classification, ROC/PR, Calibration | machine_learning, statistics | probability, optimization, convex_analysis | scaffolded |
 | `lorenz_attractor_lab` | Lorenz Attractor Lab: Integration, Poincaré Sections, and Sensitivity to Initial Conditions | physics, dynamical-systems | ODE, nonlinear dynamics | scaffolded |
-| `lotka_volterra_studio` | Lotka–Volterra Studio: nullclines, fixed points, limit cycles; parameter continuation | biology, ecology, dynamical-systems | ODE, nonlinear-dynamics, bifurcation-analysis | scaffolded |
+| `lotka_volterra_studio` | Lotka–Volterra Studio: nullclines, fixed points, limit cycles; parameter continuation | biology, ecology, dynamical-systems | ODE, nonlinear-dynamics, bifurcation-analysis | runnable |
 | `matrix_workbench` | Matrix Workbench — Rank, Determinant, LU/QR; Unit Square/Cube Effects | mathematics, computational linear algebra | matrix factorization, numerical linear algebra | scaffolded |
 | `multiple_testing_control` | Multiple Testing Control |  |  | scaffolded |
 | `orthogonality_lab` | Orthogonality Lab — Gram–Schmidt | mathematics, computer-science | linear-algebra, matrix-factorization, numerical-analysis | scaffolded |

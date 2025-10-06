@@ -1,18 +1,21 @@
-
 """
 simulate.py — Generate standardized sum samples across n_list and summarize convergence.
 Outputs results.parquet with summary metrics and a few diagnostic quantiles.
 """
+
 import argparse, json
 import numpy as np, pandas as pd, yaml
 from pathlib import Path
 from scipy import stats
 from model import IIDSpec, standardized_sum_samples
 
+
 def run_sim(config_path: str):
     cfg = yaml.safe_load(Path(config_path).read_text())
     rng = np.random.default_rng(cfg.get("seed", None))
-    spec = IIDSpec(name=cfg["distribution"]["name"], params=cfg["distribution"]["params"])
+    spec = IIDSpec(
+        name=cfg["distribution"]["name"], params=cfg["distribution"]["params"]
+    )
     n_list = cfg["n_list"]
     trials = int(cfg["trials_per_n"])
     use_pop = bool(cfg.get("use_population_moments", True))
@@ -22,30 +25,40 @@ def run_sim(config_path: str):
     sample_bank = {}
 
     for n in n_list:
-        Z = standardized_sum_samples(rng, spec, n=n, trials=trials, use_population_moments=use_pop)
+        Z = standardized_sum_samples(
+            rng, spec, n=n, trials=trials, use_population_moments=use_pop
+        )
         # Kolmogorov-Smirnov distance against N(0,1)
-        ks = stats.kstest(Z, 'norm')
+        ks = stats.kstest(Z, "norm")
         # Anderson-Darling statistic for additional sensitivity in tails
-        ad = stats.anderson(Z, dist='norm')
-        rows.append({
-            "n": n,
-            "trials": trials,
-            "ks_stat": float(ks.statistic),
-            "ks_pvalue": float(ks.pvalue),
-            "ad_stat": float(ad.statistic),
-            "mean": float(np.mean(Z)),
-            "std": float(np.std(Z, ddof=1)),
-            "q05": float(np.quantile(Z, 0.05)),
-            "q50": float(np.quantile(Z, 0.50)),
-            "q95": float(np.quantile(Z, 0.95)),
-        })
-        if n in (n_list[min(3, len(n_list)-1)], n_list[-2] if len(n_list)>1 else n_list[0]):
+        ad = stats.anderson(Z, dist="norm")
+        rows.append(
+            {
+                "n": n,
+                "trials": trials,
+                "ks_stat": float(ks.statistic),
+                "ks_pvalue": float(ks.pvalue),
+                "ad_stat": float(ad.statistic),
+                "mean": float(np.mean(Z)),
+                "std": float(np.std(Z, ddof=1)),
+                "q05": float(np.quantile(Z, 0.05)),
+                "q50": float(np.quantile(Z, 0.50)),
+                "q95": float(np.quantile(Z, 0.95)),
+            }
+        )
+        if n in (
+            n_list[min(3, len(n_list) - 1)],
+            n_list[-2] if len(n_list) > 1 else n_list[0],
+        ):
             # store up to 5000 for later hist/QQ
             sample_bank[str(n)] = Z[: min(5000, len(Z))].astype(float).tolist()
 
     df = pd.DataFrame(rows).sort_values("n").reset_index(drop=True)
-    out_path = Path(cfg["results_file"]).resolve() if Path(cfg["results_file"]).is_absolute() \
-               else Path.cwd() / cfg["results_file"]
+    out_path = (
+        Path(cfg["results_file"]).resolve()
+        if Path(cfg["results_file"]).is_absolute()
+        else Path.cwd() / cfg["results_file"]
+    )
     try:
         df.to_parquet(out_path, index=False)
     except Exception:
@@ -53,6 +66,7 @@ def run_sim(config_path: str):
         df.to_csv(out_csv, index=False)
         out_path = out_csv
     return df, sample_bank, cfg
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -63,6 +77,7 @@ if __name__ == "__main__":
     Path("samples.json").write_text(json.dumps(sample_bank))
     print(f"Wrote {cfg['results_file']} with {len(df)} rows and samples.json")
 
+
 # --- AUTO-ADDED STUB: uniform entrypoint ---
 def run(config_path: str) -> str:
     """Uniform entrypoint.
@@ -71,9 +86,15 @@ def run(config_path: str) -> str:
     """
     from pathlib import Path
     import pandas as pd
+
     try:
         import yaml
-        cfg = yaml.safe_load(Path(config_path).read_text()) if Path(config_path).exists() else {}
+
+        cfg = (
+            yaml.safe_load(Path(config_path).read_text())
+            if Path(config_path).exists()
+            else {}
+        )
     except Exception:
         cfg = {}
     out = (cfg.get("paths", {}) or {}).get("results", "results.parquet")
@@ -82,6 +103,5 @@ def run(config_path: str) -> str:
         outp.parent.mkdir(parents=True, exist_ok=True)
     # If some existing main already produced an artifact, keep it. Otherwise, write a tiny placeholder.
     if not outp.exists():
-        pd.DataFrame({"placeholder":[0]}).to_parquet(outp)
+        pd.DataFrame({"placeholder": [0]}).to_parquet(outp)
     return str(outp)
-

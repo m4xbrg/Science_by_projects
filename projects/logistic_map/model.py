@@ -6,14 +6,18 @@ API targets portfolio consistency:
 - jacobian(x, params): derivative f'(x; params)
 - iterate_map(...): helper to run many steps and statistics
 """
+
 from __future__ import annotations
 from dataclasses import dataclass
 import numpy as np
 
+
 @dataclass
 class LogisticParams:
     """Container for logistic map parameters."""
+
     r: float
+
 
 def rhs(n: int, x: np.ndarray | float, params: LogisticParams) -> np.ndarray | float:
     """
@@ -37,6 +41,7 @@ def rhs(n: int, x: np.ndarray | float, params: LogisticParams) -> np.ndarray | f
     r = params.r
     return r * np.asarray(x) * (1.0 - np.asarray(x))
 
+
 def jacobian(x: np.ndarray | float, params: LogisticParams) -> np.ndarray | float:
     """
     Derivative of the logistic map with respect to x.
@@ -55,7 +60,15 @@ def jacobian(x: np.ndarray | float, params: LogisticParams) -> np.ndarray | floa
     r = params.r
     return r * (1.0 - 2.0 * np.asarray(x))
 
-def iterate_map(r_values: np.ndarray, x0: float, n_transient: int, n_iter: int, n_keep: int, clip_eps: float = 1e-15):
+
+def iterate_map(
+    r_values: np.ndarray,
+    x0: float,
+    n_transient: int,
+    n_iter: int,
+    n_keep: int,
+    clip_eps: float = 1e-15,
+):
     """
     Iterate the logistic map for multiple r values, returning bifurcation points and Lyapunov exponents.
 

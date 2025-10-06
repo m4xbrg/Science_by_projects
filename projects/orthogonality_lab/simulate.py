@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from model import gram_schmidt, compute_metrics, make_matrix
 
+
 def _save_df(df: pd.DataFrame, out_dir: str, use_parquet: bool) -> str:
     os.makedirs(out_dir, exist_ok=True)
     path_parquet = os.path.join(out_dir, "results.parquet")
@@ -14,9 +15,13 @@ def _save_df(df: pd.DataFrame, out_dir: str, use_parquet: bool) -> str:
             df.to_parquet(path_parquet, index=False)
             return path_parquet
         except Exception as e:
-            print(f"[warn] Parquet unavailable ({e}); falling back to CSV.", file=sys.stderr)
+            print(
+                f"[warn] Parquet unavailable ({e}); falling back to CSV.",
+                file=sys.stderr,
+            )
     df.to_csv(path_csv, index=False)
     return path_csv
+
 
 def run_one(cfg: dict, trial_seed: int) -> dict:
     cfg_local = dict(cfg)
@@ -26,12 +31,14 @@ def run_one(cfg: dict, trial_seed: int) -> dict:
     metrics = compute_metrics(A, Q, R)
     return {
         "seed": trial_seed,
-        "m": cfg["m"], "n": cfg["n"],
+        "m": cfg["m"],
+        "n": cfg["n"],
         "kind": info["kind"],
         "method": cfg["method"],
         "reorth": int(cfg["reorth"]),
         **metrics,
     }
+
 
 def main():
     ap = argparse.ArgumentParser()
@@ -56,8 +63,10 @@ def main():
 
     print(json.dumps({"wrote": path, "rows": len(df)}, indent=2))
 
+
 if __name__ == "__main__":
     main()
+
 
 # --- AUTO-ADDED STUB: uniform entrypoint ---
 def run(config_path: str) -> str:
@@ -67,9 +76,15 @@ def run(config_path: str) -> str:
     """
     from pathlib import Path
     import pandas as pd
+
     try:
         import yaml
-        cfg = yaml.safe_load(Path(config_path).read_text()) if Path(config_path).exists() else {}
+
+        cfg = (
+            yaml.safe_load(Path(config_path).read_text())
+            if Path(config_path).exists()
+            else {}
+        )
     except Exception:
         cfg = {}
     out = (cfg.get("paths", {}) or {}).get("results", "results.parquet")
@@ -78,6 +93,5 @@ def run(config_path: str) -> str:
         outp.parent.mkdir(parents=True, exist_ok=True)
     # If some existing main already produced an artifact, keep it. Otherwise, write a tiny placeholder.
     if not outp.exists():
-        pd.DataFrame({"placeholder":[0]}).to_parquet(outp)
+        pd.DataFrame({"placeholder": [0]}).to_parquet(outp)
     return str(outp)
-

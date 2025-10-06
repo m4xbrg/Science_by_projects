@@ -8,11 +8,13 @@ Point = Tuple[float, float]
 IntersectResult = Tuple[List[Point], str]
 DEFAULT_EPS = 1e-9
 
+
 def point_distance(p1: Point, p2: Point) -> float:
     """Euclidean distance between two points in R^2."""
     x1, y1 = p1
     x2, y2 = p2
     return math.hypot(x2 - x1, y2 - y1)
+
 
 def midpoint(p1: Point, p2: Point) -> Point:
     """Midpoint of the segment connecting p1 and p2."""
@@ -20,20 +22,25 @@ def midpoint(p1: Point, p2: Point) -> Point:
     x2, y2 = p2
     return ((x1 + x2) / 2.0, (y1 + y2) / 2.0)
 
+
 def almost_equal(a: float, b: float, eps: float = DEFAULT_EPS) -> bool:
     """Floating-point comparison within tolerance eps."""
     return abs(a - b) <= eps
 
+
 @dataclass(frozen=True)
 class Line:
     """Line in implicit form: a*x + b*y + c = 0 (optionally normalized)."""
+
     a: float
     b: float
     c: float
     normalized: bool = True
 
     @staticmethod
-    def from_points(p1: Point, p2: Point, normalize: bool = True, eps: float = DEFAULT_EPS) -> "Line":
+    def from_points(
+        p1: Point, p2: Point, normalize: bool = True, eps: float = DEFAULT_EPS
+    ) -> "Line":
         if point_distance(p1, p2) <= eps:
             raise ValueError("Degenerate line: points are coincident.")
         x1, y1 = p1
@@ -47,7 +54,9 @@ class Line:
         return Line(a, b, c, normalized=normalize)
 
     @staticmethod
-    def from_coeffs(a: float, b: float, c: float, normalize: bool = True, eps: float = DEFAULT_EPS) -> "Line":
+    def from_coeffs(
+        a: float, b: float, c: float, normalize: bool = True, eps: float = DEFAULT_EPS
+    ) -> "Line":
         if math.hypot(a, b) <= eps:
             raise ValueError("Invalid line: a and b cannot both be ~0.")
         if normalize:
@@ -68,9 +77,11 @@ class Line:
 
     def direction_unit(self) -> Point:
         denom = math.hypot(self.a, self.b)
-        return ( self.b / denom, -self.a / denom )
+        return (self.b / denom, -self.a / denom)
 
-    def intersect_line(self, other: "Line", eps: float = DEFAULT_EPS) -> IntersectResult:
+    def intersect_line(
+        self, other: "Line", eps: float = DEFAULT_EPS
+    ) -> IntersectResult:
         a1, b1, c1 = self.a, self.b, self.c
         a2, b2, c2 = other.a, other.b, other.c
         det = a1 * b2 - a2 * b1
@@ -86,9 +97,11 @@ class Line:
         y = (c1 * a2 - c2 * a1) / det
         return ([(x, y)], "proper")
 
+
 @dataclass(frozen=True)
 class Circle:
     """Circle defined by center (x0, y0) and radius r>0."""
+
     x0: float
     y0: float
     r: float
@@ -114,7 +127,9 @@ class Circle:
         p2 = (p_perp[0] + delta * u[0], p_perp[1] + delta * u[1])
         return ([p1, p2], "secant")
 
-    def intersect_circle(self, other: "Circle", eps: float = DEFAULT_EPS) -> IntersectResult:
+    def intersect_circle(
+        self, other: "Circle", eps: float = DEFAULT_EPS
+    ) -> IntersectResult:
         O1 = np.array(self.center)
         O2 = np.array(other.center)
         d = float(np.linalg.norm(O2 - O1))
@@ -144,6 +159,8 @@ class Circle:
 
         P_plus = P0 + h * n_hat
         P_minus = P0 - h * n_hat
-        pts = [(float(P_minus[0]), float(P_minus[1])),
-               (float(P_plus[0]), float(P_plus[1]))]
+        pts = [
+            (float(P_minus[0]), float(P_minus[1])),
+            (float(P_plus[0]), float(P_plus[1])),
+        ]
         return (pts, "secant")

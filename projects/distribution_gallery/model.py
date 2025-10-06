@@ -11,27 +11,31 @@ from scipy import stats
 
 ArrayLike = Union[np.ndarray, float, int]
 
+
 @dataclass(frozen=True)
 class DistributionSpec:
-    family: str           # "normal" | "exponential" | "poisson"
-    kind: str             # "continuous" | "discrete"
+    family: str  # "normal" | "exponential" | "poisson"
+    kind: str  # "continuous" | "discrete"
     params: Dict[str, float]
+
 
 class DistributionModel:
     """
     Unified interface to common distributions.
     Maps mathematical definitions to SciPy implementations.
     """
+
     def __init__(self, spec: DistributionSpec):
         self.spec = spec
         fam = spec.family.lower()
         if fam == "normal":
-            self._dist = stats.norm(loc=spec.params.get("mu", 0.0),
-                                     scale=spec.params.get("sigma", 1.0))
+            self._dist = stats.norm(
+                loc=spec.params.get("mu", 0.0), scale=spec.params.get("sigma", 1.0)
+            )
         elif fam == "exponential":
             # rate = λ, scale = 1/λ in SciPy's parameterization
             lam = spec.params.get("rate", 1.0)
-            self._dist = stats.expon(scale=1.0/lam)
+            self._dist = stats.expon(scale=1.0 / lam)
         elif fam == "poisson":
             lam = spec.params.get("lambda", 1.0)
             self._dist = stats.poisson(mu=lam)
@@ -68,12 +72,23 @@ class DistributionModel:
             return {"mean": mu, "var": sigma**2, "skew": 0.0, "kurtosis_excess": 0.0}
         elif fam == "exponential":
             lam = p.get("rate", 1.0)
-            return {"mean": 1/lam, "var": 1/lam**2, "skew": 2.0, "kurtosis_excess": 6.0}
+            return {
+                "mean": 1 / lam,
+                "var": 1 / lam**2,
+                "skew": 2.0,
+                "kurtosis_excess": 6.0,
+            }
         elif fam == "poisson":
             lam = p.get("lambda", 1.0)
-            return {"mean": lam, "var": lam, "skew": 1/np.sqrt(lam), "kurtosis_excess": 1/lam}
+            return {
+                "mean": lam,
+                "var": lam,
+                "skew": 1 / np.sqrt(lam),
+                "kurtosis_excess": 1 / lam,
+            }
         else:
             raise ValueError(f"Unsupported family: {fam}")
+
 
 def make_model(family: str, kind: str, params: Dict[str, float]) -> DistributionModel:
     """Factory to build a DistributionModel from basic fields."""

@@ -2,20 +2,26 @@ import numpy as np
 from dataclasses import dataclass
 from typing import Tuple, Dict
 
+
 @dataclass
 class ZParams:
     tau: float = 3.0
+
 
 @dataclass
 class ZRobustParams:
     tau: float = 3.5
     mad_eps: float = 1e-9  # additive jitter to avoid divide-by-zero
 
+
 @dataclass
 class IQRParams:
     k: float = 1.5
 
-def classical_z_scores(x: np.ndarray, params: ZParams) -> Tuple[np.ndarray, Dict[str, float]]:
+
+def classical_z_scores(
+    x: np.ndarray, params: ZParams
+) -> Tuple[np.ndarray, Dict[str, float]]:
     """
     Compute classical z-scores using sample mean and std.
     Returns (mask, stats).
@@ -27,7 +33,10 @@ def classical_z_scores(x: np.ndarray, params: ZParams) -> Tuple[np.ndarray, Dict
     mask = np.abs(z) > params.tau
     return mask, {"mu": mu, "std": s, "tau": params.tau}
 
-def robust_z_scores(x: np.ndarray, params: ZRobustParams) -> Tuple[np.ndarray, Dict[str, float]]:
+
+def robust_z_scores(
+    x: np.ndarray, params: ZRobustParams
+) -> Tuple[np.ndarray, Dict[str, float]]:
     """
     Compute robust z-scores using median and MAD scaled by 1.4826.
     Returns (mask, stats).
@@ -39,6 +48,7 @@ def robust_z_scores(x: np.ndarray, params: ZRobustParams) -> Tuple[np.ndarray, D
     mask = np.abs(z) > params.tau
     return mask, {"median": med, "mad": mad, "scale": s, "tau": params.tau}
 
+
 def iqr_fences(x: np.ndarray, params: IQRParams) -> Tuple[np.ndarray, Dict[str, float]]:
     """
     Compute IQR fences (Tukey): [Q1 - k*IQR, Q3 + k*IQR].
@@ -49,11 +59,25 @@ def iqr_fences(x: np.ndarray, params: IQRParams) -> Tuple[np.ndarray, Dict[str, 
     lo = q1 - params.k * iqr
     hi = q3 + params.k * iqr
     mask = (x < lo) | (x > hi)
-    return mask, {"q1": float(q1), "q3": float(q3), "iqr": float(iqr), "k": params.k, "lo": float(lo), "hi": float(hi)}
+    return mask, {
+        "q1": float(q1),
+        "q3": float(q3),
+        "iqr": float(iqr),
+        "k": params.k,
+        "lo": float(lo),
+        "hi": float(hi),
+    }
 
-def simulate_contaminated_sample(n: int, epsilon: float, rng: np.random.Generator,
-                                 base_mu: float, base_sigma: float,
-                                 out_mu: float, out_sigma: float):
+
+def simulate_contaminated_sample(
+    n: int,
+    epsilon: float,
+    rng: np.random.Generator,
+    base_mu: float,
+    base_sigma: float,
+    out_mu: float,
+    out_sigma: float,
+):
     """
     Draw n points from F_epsilon = (1-eps)N(base_mu, base_sigma^2) + eps N(out_mu, out_sigma^2).
     Returns (x, y), where y=1 denotes an outlier.
@@ -68,6 +92,7 @@ def simulate_contaminated_sample(n: int, epsilon: float, rng: np.random.Generato
     perm = rng.permutation(n)
     return x[perm], y[perm]
 
+
 def prf(mask: np.ndarray, y: np.ndarray):
     """
     Compute precision, recall, F1 for binary outlier mask vs true labels y in {0,1}.
@@ -77,5 +102,9 @@ def prf(mask: np.ndarray, y: np.ndarray):
     fn = int(np.sum((mask == 0) & (y == 1)))
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
     recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
-    f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
+    f1 = (
+        2 * precision * recall / (precision + recall)
+        if (precision + recall) > 0
+        else 0.0
+    )
     return float(precision), float(recall), float(f1)

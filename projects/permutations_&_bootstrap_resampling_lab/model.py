@@ -1,30 +1,37 @@
 """
 Resampling engines for bootstrap/permutation CIs and coverage experiments.
 """
+
 from __future__ import annotations
 import numpy as np
-from dataclasses import dataclass
+from dataclasses import dataclass  # noqa: E402
 from typing import Dict, Tuple
 
 Array = np.ndarray
 
+
 # ---------------------- Distributions ----------------------
-def sample_distribution(rng: np.random.Generator, family: str, n: int, params: Dict) -> Array:
+def sample_distribution(
+    rng: np.random.Generator, family: str, n: int, params: Dict
+) -> Array:
     """
     Draws i.i.d. samples from a named family.
     Supported families: normal(mu, sigma), lognormal(mu, sigma), t(df), laplace(mu, b)
     """
     if family == "normal":
-        mu = params.get("mu", 0.0); sigma = params.get("sigma", 1.0)
+        mu = params.get("mu", 0.0)
+        sigma = params.get("sigma", 1.0)
         return rng.normal(mu, sigma, size=n)
     if family == "lognormal":
-        mu = params.get("mu", 0.0); sigma = params.get("sigma", 1.0)
+        mu = params.get("mu", 0.0)
+        sigma = params.get("sigma", 1.0)
         return rng.lognormal(mean=mu, sigma=sigma, size=n)
     if family == "t":
         df = params.get("df", 5.0)
         return rng.standard_t(df, size=n)
     if family == "laplace":
-        mu = params.get("mu", 0.0); b = params.get("b", 1.0)
+        mu = params.get("mu", 0.0)
+        b = params.get("b", 1.0)
         return rng.laplace(mu, b, size=n)
     raise ValueError(f"Unknown family: {family}")
 
@@ -39,7 +46,8 @@ def true_parameter(family: str, params: Dict, statistic: str) -> float:
         if family == "normal":
             return float(params.get("mu", 0.0))
         if family == "lognormal":
-            mu = params.get("mu", 0.0); sigma = params.get("sigma", 1.0)
+            mu = params.get("mu", 0.0)
+            sigma = params.get("sigma", 1.0)
             return float(np.exp(mu + 0.5 * sigma**2))
         if family == "t":
             df = params.get("df", 5.0)
@@ -52,7 +60,9 @@ def true_parameter(family: str, params: Dict, statistic: str) -> float:
         if family == "lognormal":
             mu = params.get("mu", 0.0)
             return float(np.exp(mu))
-    raise ValueError(f"No closed-form true parameter for (family={family}, statistic={statistic}).")
+    raise ValueError(
+        f"No closed-form true parameter for (family={family}, statistic={statistic})."
+    )
 
 
 # ---------------------- Statistics ----------------------
@@ -65,7 +75,9 @@ def compute_statistic(x: Array, statistic: str) -> float:
 
 
 # ---------------------- Bootstrap CIs ----------------------
-def bootstrap_statistics(rng: np.random.Generator, x: Array, B: int, statistic: str) -> Array:
+def bootstrap_statistics(
+    rng: np.random.Generator, x: Array, B: int, statistic: str
+) -> Array:
     """Return bootstrap replicate statistics T* for B resamples with replacement."""
     n = len(x)
     idx = rng.integers(0, n, size=(B, n))
@@ -78,19 +90,26 @@ def bootstrap_statistics(rng: np.random.Generator, x: Array, B: int, statistic: 
 
 
 def ci_percentile(Tstar: Array, alpha: float) -> Tuple[float, float]:
-    lo = float(np.quantile(Tstar, alpha/2, method="linear"))
-    hi = float(np.quantile(Tstar, 1 - alpha/2, method="linear"))
+    lo = float(np.quantile(Tstar, alpha / 2, method="linear"))
+    hi = float(np.quantile(Tstar, 1 - alpha / 2, method="linear"))
     return lo, hi
 
 
 def ci_basic(T: float, Tstar: Array, alpha: float) -> Tuple[float, float]:
-    q_lo = float(np.quantile(Tstar, 1 - alpha/2, method="linear"))
-    q_hi = float(np.quantile(Tstar, alpha/2, method="linear"))
+    q_lo = float(np.quantile(Tstar, 1 - alpha / 2, method="linear"))
+    q_hi = float(np.quantile(Tstar, alpha / 2, method="linear"))
     # Basic CI reflects around T: [2T - q_hi, 2T - q_lo]
-    return 2*T - q_lo, 2*T - q_hi
+    return 2 * T - q_lo, 2 * T - q_hi
 
 
-def one_sample_ci(rng: np.random.Generator, x: Array, statistic: str, method: str, B: int, alpha: float):
+def one_sample_ci(
+    rng: np.random.Generator,
+    x: Array,
+    statistic: str,
+    method: str,
+    B: int,
+    alpha: float,
+):
     """Compute T, (lo,hi) for one-sample CI via bootstrap method."""
     T = compute_statistic(x, statistic)
     Tstar = bootstrap_statistics(rng, x, B, statistic)
@@ -104,7 +123,8 @@ def one_sample_ci(rng: np.random.Generator, x: Array, statistic: str, method: st
 
 
 # ---------------------- Permutation (extension hook) ----------------------
-from dataclasses import dataclass
+from dataclasses import dataclass  # noqa: E402
+
 
 @dataclass
 class TwoSampleSpec:

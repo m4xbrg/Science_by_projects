@@ -5,6 +5,7 @@ import pandas as pd
 from pathlib import Path
 from model import MapParams, step, eig_info
 
+
 def run_simulation(config_path: str = "config.yaml"):
     # Load config
     with open(config_path, "r") as f:
@@ -41,8 +42,10 @@ def run_simulation(config_path: str = "config.yaml"):
     print("Eigen info:", json.dumps(info, indent=2))
     print("Saved: results.parquet, run_meta.json")
 
+
 if __name__ == "__main__":
     run_simulation()
+
 
 # --- AUTO-ADDED STUB: uniform entrypoint ---
 def run(config_path: str) -> str:
@@ -52,9 +55,15 @@ def run(config_path: str) -> str:
     """
     from pathlib import Path
     import pandas as pd
+
     try:
         import yaml
-        cfg = yaml.safe_load(Path(config_path).read_text()) if Path(config_path).exists() else {}
+
+        cfg = (
+            yaml.safe_load(Path(config_path).read_text())
+            if Path(config_path).exists()
+            else {}
+        )
     except Exception:
         cfg = {}
     out = (cfg.get("paths", {}) or {}).get("results", "results.parquet")
@@ -63,6 +72,5 @@ def run(config_path: str) -> str:
         outp.parent.mkdir(parents=True, exist_ok=True)
     # If some existing main already produced an artifact, keep it. Otherwise, write a tiny placeholder.
     if not outp.exists():
-        pd.DataFrame({"placeholder":[0]}).to_parquet(outp)
+        pd.DataFrame({"placeholder": [0]}).to_parquet(outp)
     return str(outp)
-

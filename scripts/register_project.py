@@ -3,8 +3,10 @@ Register a project meta.json into ontology/master_index.csv
 Usage:
   python scripts/register_project.py --meta projects/001_lotka_volterra/meta.json
 """
+
 import argparse, json, pandas as pd
 from pathlib import Path
+
 
 def main():
     ap = argparse.ArgumentParser()
@@ -28,12 +30,15 @@ def main():
         "related_projects": ";".join(meta.get("related_projects", [])),
     }
 
-    df = pd.read_csv(idx_path) if idx_path.exists() else pd.DataFrame(columns=row.keys())
+    df = (
+        pd.read_csv(idx_path) if idx_path.exists() else pd.DataFrame(columns=row.keys())
+    )
     # replace existing row with same id
     df = df[df["id"] != row["id"]]
     df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
     df.to_csv(idx_path, index=False)
     print(f"Registered project {row['id']} into {idx_path}")
+
 
 if __name__ == "__main__":
     main()

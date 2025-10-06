@@ -7,6 +7,7 @@ from sklearn.preprocessing import StandardScaler
 
 CalibMethod = Literal["none", "platt", "isotonic"]
 
+
 @dataclass
 class FittedModel:
     scaler: StandardScaler
@@ -16,6 +17,7 @@ class FittedModel:
         """Return probabilities p(y=1|x) before post-hoc calibration."""
         Xt = self.scaler.transform(X)
         return self.clf.predict_proba(Xt)
+
 
 def fit_logreg(
     X_train: np.ndarray,
@@ -32,11 +34,16 @@ def fit_logreg(
 
     C = 1e12 if lambda_l2 == 0 else 1.0 / lambda_l2
     clf = LogisticRegression(
-        C=C, penalty="l2", fit_intercept=fit_intercept,
-        max_iter=max_iter, solver=solver, random_state=seed
+        C=C,
+        penalty="l2",
+        fit_intercept=fit_intercept,
+        max_iter=max_iter,
+        solver=solver,
+        random_state=seed,
     )
     clf.fit(Xt, y_train)
     return FittedModel(scaler=scaler, clf=clf)
+
 
 class PlattCalibrator:
     def __init__(self):
@@ -54,6 +61,7 @@ class PlattCalibrator:
 
     def fit(self, p_val: np.ndarray, y_val: np.ndarray, max_iter: int = 200):
         from sklearn.linear_model import LogisticRegression
+
         X = self._logit(p_val).reshape(-1, 1)
         lr = LogisticRegression(solver="lbfgs", max_iter=max_iter)
         lr.fit(X, y_val)
@@ -64,6 +72,7 @@ class PlattCalibrator:
     def transform(self, p: np.ndarray) -> np.ndarray:
         z = self.a_ * self._logit(p) + self.c_
         return self._sigmoid(z)
+
 
 class IsotonicCalibrator:
     def __init__(self):
@@ -76,6 +85,7 @@ class IsotonicCalibrator:
 
     def transform(self, p: np.ndarray) -> np.ndarray:
         return self.iso_.transform(p)
+
 
 def make_calibrator(method: CalibMethod):
     if method == "platt":

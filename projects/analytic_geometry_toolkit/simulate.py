@@ -4,9 +4,11 @@ import pandas as pd
 from pathlib import Path
 from model import Line, Circle, point_distance, midpoint, DEFAULT_EPS
 
+
 def load_config(path: str):
     with open(path, "r") as f:
         return yaml.safe_load(f)
+
 
 def build_scene(scene_cfg, epsilon: float, normalize_lines: bool):
     points = [tuple(p) for p in scene_cfg.get("points", [])]
@@ -14,10 +16,14 @@ def build_scene(scene_cfg, epsilon: float, normalize_lines: bool):
     for L in scene_cfg.get("lines", []):
         if "from_points" in L:
             p1, p2 = map(tuple, L["from_points"])
-            lines.append(Line.from_points(p1, p2, normalize=normalize_lines, eps=epsilon))
+            lines.append(
+                Line.from_points(p1, p2, normalize=normalize_lines, eps=epsilon)
+            )
         elif "coeffs" in L:
             a, b, c = L["coeffs"]
-            lines.append(Line.from_coeffs(a, b, c, normalize=normalize_lines, eps=epsilon))
+            lines.append(
+                Line.from_coeffs(a, b, c, normalize=normalize_lines, eps=epsilon)
+            )
         else:
             raise ValueError("Line entry must have 'from_points' or 'coeffs'.")
     circles = []
@@ -27,12 +33,13 @@ def build_scene(scene_cfg, epsilon: float, normalize_lines: bool):
         circles.append(Circle(x0, y0, r))
     return points, lines, circles
 
+
 def compute_tables(points, lines, circles, epsilon: float):
     # Distances & midpoints between points
     rows_dist = []
     rows_mid = []
     for i in range(len(points)):
-        for j in range(i+1, len(points)):
+        for j in range(i + 1, len(points)):
             d = point_distance(points[i], points[j])
             m = midpoint(points[i], points[j])
             rows_dist.append({"i": i, "j": j, "distance": d})
@@ -45,33 +52,94 @@ def compute_tables(points, lines, circles, epsilon: float):
 
     # line-line
     for i in range(len(lines)):
-        for j in range(i+1, len(lines)):
+        for j in range(i + 1, len(lines)):
             pts, rel = lines[i].intersect_line(lines[j], eps=epsilon)
             for k, (x, y) in enumerate(pts):
-                inter_rows.append({"type": "L-L", "obj1": i, "obj2": j, "k": k, "x": x, "y": y, "relation": rel})
+                inter_rows.append(
+                    {
+                        "type": "L-L",
+                        "obj1": i,
+                        "obj2": j,
+                        "k": k,
+                        "x": x,
+                        "y": y,
+                        "relation": rel,
+                    }
+                )
             if not pts:
-                inter_rows.append({"type": "L-L", "obj1": i, "obj2": j, "k": None, "x": None, "y": None, "relation": rel})
+                inter_rows.append(
+                    {
+                        "type": "L-L",
+                        "obj1": i,
+                        "obj2": j,
+                        "k": None,
+                        "x": None,
+                        "y": None,
+                        "relation": rel,
+                    }
+                )
 
     # line-circle
     for i, L in enumerate(lines):
         for j, C in enumerate(circles):
             pts, rel = C.intersect_line(L, eps=epsilon)
             for k, (x, y) in enumerate(pts):
-                inter_rows.append({"type": "L-C", "obj1": i, "obj2": j, "k": k, "x": x, "y": y, "relation": rel})
+                inter_rows.append(
+                    {
+                        "type": "L-C",
+                        "obj1": i,
+                        "obj2": j,
+                        "k": k,
+                        "x": x,
+                        "y": y,
+                        "relation": rel,
+                    }
+                )
             if not pts:
-                inter_rows.append({"type": "L-C", "obj1": i, "obj2": j, "k": None, "x": None, "y": None, "relation": rel})
+                inter_rows.append(
+                    {
+                        "type": "L-C",
+                        "obj1": i,
+                        "obj2": j,
+                        "k": None,
+                        "x": None,
+                        "y": None,
+                        "relation": rel,
+                    }
+                )
 
     # circle-circle
     for i in range(len(circles)):
-        for j in range(i+1, len(circles)):
+        for j in range(i + 1, len(circles)):
             pts, rel = circles[i].intersect_circle(circles[j], eps=epsilon)
             for k, (x, y) in enumerate(pts):
-                inter_rows.append({"type": "C-C", "obj1": i, "obj2": j, "k": k, "x": x, "y": y, "relation": rel})
+                inter_rows.append(
+                    {
+                        "type": "C-C",
+                        "obj1": i,
+                        "obj2": j,
+                        "k": k,
+                        "x": x,
+                        "y": y,
+                        "relation": rel,
+                    }
+                )
             if not pts:
-                inter_rows.append({"type": "C-C", "obj1": i, "obj2": j, "k": None, "x": None, "y": None, "relation": rel})
+                inter_rows.append(
+                    {
+                        "type": "C-C",
+                        "obj1": i,
+                        "obj2": j,
+                        "k": None,
+                        "x": None,
+                        "y": None,
+                        "relation": rel,
+                    }
+                )
 
     df_inter = pd.DataFrame(inter_rows)
     return df_dist, df_mid, df_inter
+
 
 def main(config_path="config.yaml"):
     cfg = load_config(config_path)
@@ -95,15 +163,16 @@ def main(config_path="config.yaml"):
         df_all.to_parquet(out_path, index=False)
         print(f"Wrote Parquet: {out_path}")
     except Exception as e:
-        csv_path = Path(str(out_path).replace('.parquet', '.csv'))
+        csv_path = Path(str(out_path).replace(".parquet", ".csv"))
         df_all.to_csv(csv_path, index=False)
         print(f"Parquet not available ({e}). Wrote CSV instead: {csv_path}")
 
-
     print(f"Wrote {out_path} with {len(df_all)} rows.")
+
 
 if __name__ == "__main__":
     main()
+
 
 # --- AUTO-ADDED STUB: uniform entrypoint ---
 def run(config_path: str) -> str:
@@ -113,9 +182,15 @@ def run(config_path: str) -> str:
     """
     from pathlib import Path
     import pandas as pd
+
     try:
         import yaml
-        cfg = yaml.safe_load(Path(config_path).read_text()) if Path(config_path).exists() else {}
+
+        cfg = (
+            yaml.safe_load(Path(config_path).read_text())
+            if Path(config_path).exists()
+            else {}
+        )
     except Exception:
         cfg = {}
     out = (cfg.get("paths", {}) or {}).get("results", "results.parquet")
@@ -124,6 +199,5 @@ def run(config_path: str) -> str:
         outp.parent.mkdir(parents=True, exist_ok=True)
     # If some existing main already produced an artifact, keep it. Otherwise, write a tiny placeholder.
     if not outp.exists():
-        pd.DataFrame({"placeholder":[0]}).to_parquet(outp)
+        pd.DataFrame({"placeholder": [0]}).to_parquet(outp)
     return str(outp)
-

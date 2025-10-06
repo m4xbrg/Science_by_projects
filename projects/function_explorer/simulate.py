@@ -3,6 +3,7 @@ import yaml
 import pandas as pd
 from function_explorer import FunctionExplorer
 
+
 def main():
     with open("config.yaml") as f:
         cfg = yaml.safe_load(f)
@@ -16,12 +17,14 @@ def main():
     result = fx.analyze(window=window, samples=samples, tol=tol)
 
     # Save samples for downstream analysis
-    df = pd.DataFrame({ "X": result.samples["X"], "Y": result.samples["Y"] })
+    df = pd.DataFrame({"X": result.samples["X"], "Y": result.samples["Y"]})
     df.to_parquet("results.parquet", index=False)
     print("Saved analysis results to results.parquet")
 
+
 if __name__ == "__main__":
     main()
+
 
 # --- AUTO-ADDED STUB: uniform entrypoint ---
 def run(config_path: str) -> str:
@@ -31,9 +34,15 @@ def run(config_path: str) -> str:
     """
     from pathlib import Path
     import pandas as pd
+
     try:
         import yaml
-        cfg = yaml.safe_load(Path(config_path).read_text()) if Path(config_path).exists() else {}
+
+        cfg = (
+            yaml.safe_load(Path(config_path).read_text())
+            if Path(config_path).exists()
+            else {}
+        )
     except Exception:
         cfg = {}
     out = (cfg.get("paths", {}) or {}).get("results", "results.parquet")
@@ -42,6 +51,5 @@ def run(config_path: str) -> str:
         outp.parent.mkdir(parents=True, exist_ok=True)
     # If some existing main already produced an artifact, keep it. Otherwise, write a tiny placeholder.
     if not outp.exists():
-        pd.DataFrame({"placeholder":[0]}).to_parquet(outp)
+        pd.DataFrame({"placeholder": [0]}).to_parquet(outp)
     return str(outp)
-

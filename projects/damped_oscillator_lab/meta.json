@@ -29,8 +29,9 @@
   ],
   "version": "1.0.0",
   "visualization_types": [
-    "curve_plots"
+    "time_series",
+    "phase_portrait"
   ],
-  "stage": "scaffolded",
+  "stage": "runnable",
   "created": "2025-10-05T23:01:36+00:00"
 }

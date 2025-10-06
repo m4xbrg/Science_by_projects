@@ -1,6 +1,7 @@
 """
 Visualization: time series, phase portrait, residuals, and parameter uncertainty bars.
 """
+
 from __future__ import annotations
 import argparse, json
 from pathlib import Path
@@ -9,6 +10,7 @@ import pandas as pd
 import yaml
 import matplotlib.pyplot as plt
 
+
 def load_all(cfg):
     try:
         df = pd.read_parquet(cfg["paths"]["results_parquet"])
@@ -16,12 +18,13 @@ def load_all(cfg):
         df = pd.read_csv(cfg["paths"]["results_csv"])
     base = Path(cfg["paths"]["results_parquet"])
     outs = {}
-    for m in ["nls","collocation","map"]:
+    for m in ["nls", "collocation", "map"]:
         p = base.with_suffix(f".{m}.json")
         if p.exists():
-            with open(p,"r") as f:
+            with open(p, "r") as f:
                 outs[m] = json.load(f)
     return df, outs
+
 
 def fig_time_series(df, outdir):
     plt.figure()
@@ -36,6 +39,7 @@ def fig_time_series(df, outdir):
     plt.close()
     return path
 
+
 def fig_phase(df, outdir):
     plt.figure()
     plt.plot(df["x1"], df["x2"], label="trajectory")
@@ -48,11 +52,12 @@ def fig_phase(df, outdir):
     plt.close()
     return path
 
+
 def fig_param_bars(outs, outdir):
     if not outs:
         return None
     labels, theta1, theta2 = [], [], []
-    for k,v in outs.items():
+    for k, v in outs.items():
         labels.append(k.upper())
         theta1.append(v["theta_hat"][0])
         theta2.append(v["theta_hat"][1])
@@ -75,6 +80,7 @@ def fig_param_bars(outs, outdir):
     plt.close()
     return path1, path2
 
+
 def main(config_path: str):
     with open(config_path, "r") as f:
         cfg = yaml.safe_load(f)
@@ -85,21 +91,13 @@ def main(config_path: str):
     p3 = fig_param_bars(outs, outdir)
     print("Saved figures:", p1, p2, p3)
 
-if __name__ == "__main__":
-    import argparse
-    p = argparse.ArgumentParser()
-    p.add_argument("--results", type=str, default="results.parquet")
-    p.add_argument("--outdir", type=str, default="figs")
-    args = p.parse_args()
-    plot_primary(args.results, args.outdir)
-    plot_secondary(args.results, args.outdir)
-
 
 # --- AUTO-ADDED STUBS: uniform visualization entrypoints ---
 def plot_primary(results_path: str, outdir: str) -> str:
     from pathlib import Path
     import pandas as pd
     import matplotlib.pyplot as plt
+
     Path(outdir).mkdir(parents=True, exist_ok=True)
     df = pd.read_parquet(results_path)
     plt.figure()
@@ -108,7 +106,8 @@ def plot_primary(results_path: str, outdir: str) -> str:
     for c in df.columns:
         try:
             if pd.api.types.is_numeric_dtype(df[c]):
-                col = c; break
+                col = c
+                break
         except Exception:
             pass
     if col is None:
@@ -116,15 +115,20 @@ def plot_primary(results_path: str, outdir: str) -> str:
         col = df.columns[0]
     plt.plot(range(len(df[col])), df[col])
     plt.title("Primary Plot (stub)")
-    plt.xlabel("index"); plt.ylabel(str(col))
+    plt.xlabel("index")
+    plt.ylabel(str(col))
     out = str(Path(outdir) / "primary.png")
-    plt.tight_layout(); plt.savefig(out, dpi=160); plt.close()
+    plt.tight_layout()
+    plt.savefig(out, dpi=160)
+    plt.close()
     return out
+
 
 def plot_secondary(results_path: str, outdir: str) -> str:
     from pathlib import Path
     import pandas as pd
     import matplotlib.pyplot as plt
+
     Path(outdir).mkdir(parents=True, exist_ok=True)
     df = pd.read_parquet(results_path)
     plt.figure()
@@ -133,7 +137,8 @@ def plot_secondary(results_path: str, outdir: str) -> str:
     for c in df.columns:
         try:
             if pd.api.types.is_numeric_dtype(df[c]):
-                col = c; break
+                col = c
+                break
         except Exception:
             pass
     if col is None:
@@ -144,8 +149,10 @@ def plot_secondary(results_path: str, outdir: str) -> str:
     except Exception:
         plt.plot(range(len(df[col])), df[col])
     plt.title("Secondary Plot (stub)")
-    plt.xlabel(str(col)); plt.ylabel("count")
+    plt.xlabel(str(col))
+    plt.ylabel("count")
     out = str(Path(outdir) / "secondary.png")
-    plt.tight_layout(); plt.savefig(out, dpi=160); plt.close()
+    plt.tight_layout()
+    plt.savefig(out, dpi=160)
+    plt.close()
     return out
-

@@ -22,7 +22,9 @@ summary = {
     "y-intercept": [res.y_intercept],
     "Singularities": [json.dumps(res.singularities)],
     "Critical points (window)": [json.dumps(res.critical_points)],
-    "Range estimate [ymin, ymax]": [json.dumps([res.range_estimate[0], res.range_estimate[1]])],
+    "Range estimate [ymin, ymax]": [
+        json.dumps([res.range_estimate[0], res.range_estimate[1]])
+    ],
     "Range note": [res.range_estimate[2]],
 }
 st.dataframe(pd.DataFrame(summary))

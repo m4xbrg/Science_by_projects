@@ -9,16 +9,19 @@ Clean API:
 
 All functions are pure where possible.
 """
+
 from __future__ import annotations
 import numpy as np
 from dataclasses import dataclass
 
+
 @dataclass(frozen=True)
 class LVParams:
     alpha: float  # prey growth rate
-    beta: float   # predation rate
+    beta: float  # predation rate
     gamma: float  # predator death rate
     delta: float  # predator reproduction per prey consumed
+
 
 def rhs(t: float, x: np.ndarray, params: LVParams) -> np.ndarray:
     """
@@ -35,7 +38,8 @@ def rhs(t: float, x: np.ndarray, params: LVParams) -> np.ndarray:
     """
     X, Y = x
     a, b, g, d = params.alpha, params.beta, params.gamma, params.delta
-    return np.array([X*(a - b*Y), Y*(-g + d*X)], dtype=float)
+    return np.array([X * (a - b * Y), Y * (-g + d * X)], dtype=float)
+
 
 def jacobian(x: np.ndarray, params: LVParams) -> np.ndarray:
     """
@@ -45,8 +49,8 @@ def jacobian(x: np.ndarray, params: LVParams) -> np.ndarray:
     """
     X, Y = x
     a, b, g, d = params.alpha, params.beta, params.gamma, params.delta
-    return np.array([[a - b*Y, -b*X],
-                     [d*Y,     -g + d*X]], dtype=float)
+    return np.array([[a - b * Y, -b * X], [d * Y, -g + d * X]], dtype=float)
+
 
 def fixed_points(params: LVParams) -> np.ndarray:
     """
@@ -56,9 +60,10 @@ def fixed_points(params: LVParams) -> np.ndarray:
         - (gamma/delta, alpha/beta) if parameters >0
     """
     fp = [np.array([0.0, 0.0])]
-    if params.beta>0 and params.delta>0:
-        fp.append(np.array([params.gamma/params.delta, params.alpha/params.beta]))
+    if params.beta > 0 and params.delta > 0:
+        fp.append(np.array([params.gamma / params.delta, params.alpha / params.beta]))
     return np.vstack(fp)
+
 
 @dataclass(frozen=True)
 class GridSpec:
@@ -67,6 +72,7 @@ class GridSpec:
     y_min: float
     y_max: float
     n: int
+
 
 def nullclines(grid: GridSpec, params: LVParams) -> dict:
     """
@@ -77,10 +83,13 @@ def nullclines(grid: GridSpec, params: LVParams) -> dict:
     """
     xs = np.linspace(grid.x_min, grid.x_max, grid.n)
     ys = np.linspace(grid.y_min, grid.y_max, grid.n)
-    y_dx0 = np.full_like(xs, params.alpha/params.beta) if params.beta>0 else np.nan
-    x_dy0 = np.full_like(ys, params.gamma/params.delta) if params.delta>0 else np.nan
+    y_dx0 = np.full_like(xs, params.alpha / params.beta) if params.beta > 0 else np.nan
+    x_dy0 = (
+        np.full_like(ys, params.gamma / params.delta) if params.delta > 0 else np.nan
+    )
     return {
-        "x_axis": xs, "y_axis": ys,
-        "dx0_y": y_dx0,   # horizontal line y = alpha/beta
-        "dy0_x": x_dy0,   # vertical line x = gamma/delta
+        "x_axis": xs,
+        "y_axis": ys,
+        "dx0_y": y_dx0,  # horizontal line y = alpha/beta
+        "dy0_x": x_dy0,  # vertical line x = gamma/delta
     }

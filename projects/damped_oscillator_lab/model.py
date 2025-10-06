@@ -10,6 +10,7 @@ API:
     - energy(x, v, params): mechanical energy
     - damping_ratio(params): zeta = c / (2*sqrt(k*m))
 """
+
 from __future__ import annotations
 from math import sqrt
 from typing import Dict, Sequence
@@ -34,7 +35,7 @@ def rhs(t: float, y: Sequence[float], params: Dict[str, float]) -> np.ndarray:
     k = float(params["k"])
 
     dxdt = v
-    dvdt = -(c/m) * v - (k/m) * x  # from m x'' + c x' + k x = 0
+    dvdt = -(c / m) * v - (k / m) * x  # from m x'' + c x' + k x = 0
 
     return np.array([dxdt, dvdt], dtype=float)
 

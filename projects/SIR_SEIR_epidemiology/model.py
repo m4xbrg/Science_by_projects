@@ -1,12 +1,14 @@
 """
 model.py: SIR/SEIR with interventions and Rt/R0 utilities
 """
+
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable, List, Tuple
 import numpy as np
 
 Array = np.ndarray
+
 
 def stepwise_beta(t: float, schedule: List[Tuple[float, float]]) -> float:
     """
@@ -21,17 +23,20 @@ def stepwise_beta(t: float, schedule: List[Tuple[float, float]]) -> float:
             break
     return float(b)
 
+
 @dataclass
 class EpidemicParams:
     beta: float
     gamma: float
     sigma: float = 0.0  # used only for SEIR
 
+
 @dataclass
 class EpidemicModel:
     """
     Clean API: rhs(t, x, params) -> dx/dt for SIR or SEIR.
     """
+
     model_type: str  # "SIR" or "SEIR"
     N: float
     beta_schedule: List[Tuple[float, float]]  # [(t, beta)]
@@ -64,15 +69,15 @@ class EpidemicModel:
         if self.model_type == "SIR":
             S, I, R = x
             dS = -beta_t * S * I / self.N
-            dI =  beta_t * S * I / self.N - p.gamma * I
-            dR =  p.gamma * I
+            dI = beta_t * S * I / self.N - p.gamma * I
+            dR = p.gamma * I
             return np.array([dS, dI, dR], dtype=float)
         else:  # SEIR
             S, E, I, R = x
             dS = -beta_t * S * I / self.N
-            dE =  beta_t * S * I / self.N - p.sigma * E
-            dI =  p.sigma * E - p.gamma * I
-            dR =  p.gamma * I
+            dE = beta_t * S * I / self.N - p.sigma * E
+            dI = p.sigma * E - p.gamma * I
+            dR = p.gamma * I
             return np.array([dS, dE, dI, dR], dtype=float)
 
     # Reproduction numbers

@@ -1,39 +1,12 @@
-# YAML configuration for Lotka–Volterra Studio
-seed: 42
-
-# Time integration
-t0: 0.0
-t_final: 50.0
-dt: 0.01
-rtol: 1e-8
-atol: 1e-10
-method: "RK45"  # Options: RK45, Radau, BDF
-
-# Initial conditions
-ICs:
-  x0: 0.5   # Prey
-  y0: 0.5   # Predator
-
-# Model parameters
+t_final: 60
+n_points: 2000
 params:
-  alpha: 1.0   # Prey growth
-  beta: 0.5    # Predation rate
-  gamma: 2.0   # Predator death
-  delta: 0.5   # Predator reproduction efficiency
-
-# Grid for nullclines (phase-plane)
-grid:
-  x_min: 0.0
-  x_max: 5.0
-  y_min: 0.0
-  y_max: 5.0
-  n: 200
-
-# Parameter continuation (1D sweep)
-continuation:
-  enabled: true
-  param_name: "alpha"
-  start: 0.2
-  end: 2.0
-  steps: 16
-  transient_fraction: 0.5  # discard first fraction when computing maxima/minima
+  alpha: 1.0
+  beta: 0.1
+  gamma: 1.5
+  delta: 0.075
+ics:
+  x0: 10.0
+  y0: 5.0
+paths:
+  results: results.parquet

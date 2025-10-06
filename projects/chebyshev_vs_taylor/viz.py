@@ -5,11 +5,13 @@ Generates:
 - figs/errors.png       : |error| curves with Emax in legend
 - figs/convergence.png  : (optional) Emax vs degree n (if sweep_parquet present)
 """
+
 from pathlib import Path
 import json
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
 
 def plot_approximants(df: pd.DataFrame, out_path: Path, title: str = ""):
     x = df["x"].to_numpy()
@@ -29,13 +31,22 @@ def plot_approximants(df: pd.DataFrame, out_path: Path, title: str = ""):
     plt.savefig(out_path, bbox_inches="tight")
     plt.close()
 
+
 def plot_errors(df: pd.DataFrame, meta: dict, out_path: Path, title: str = ""):
     x = df["x"].to_numpy()
     e_cheb = np.abs(df["err_cheb"].to_numpy())
     e_taylor = np.abs(df["err_taylor"].to_numpy())
     plt.figure()
-    plt.plot(x, e_cheb, label=f"|error| Chebyshev (Emax={meta.get('Emax_cheb', np.max(e_cheb)):.3e})")
-    plt.plot(x, e_taylor, label=f"|error| Taylor (Emax={meta.get('Emax_taylor', np.max(e_taylor)):.3e})")
+    plt.plot(
+        x,
+        e_cheb,
+        label=f"|error| Chebyshev (Emax={meta.get('Emax_cheb', np.max(e_cheb)):.3e})",
+    )
+    plt.plot(
+        x,
+        e_taylor,
+        label=f"|error| Taylor (Emax={meta.get('Emax_taylor', np.max(e_taylor)):.3e})",
+    )
     plt.xlabel("x")
     plt.ylabel("absolute error")
     plt.title(title if title else "Absolute Error on [a,b]")
@@ -43,6 +54,7 @@ def plot_errors(df: pd.DataFrame, meta: dict, out_path: Path, title: str = ""):
     plt.grid(True)
     plt.savefig(out_path, bbox_inches="tight")
     plt.close()
+
 
 def plot_convergence(df_sweep: pd.DataFrame, out_path: Path):
     n = df_sweep["n"].to_numpy()
@@ -58,6 +70,7 @@ def plot_convergence(df_sweep: pd.DataFrame, out_path: Path):
     plt.grid(True, which="both")
     plt.savefig(out_path, bbox_inches="tight")
     plt.close()
+
 
 def main():
     base = Path(".")
@@ -84,14 +97,17 @@ def main():
 
     print(f"Figures written to {figs}/")
 
+
 if __name__ == "__main__":
     main()
+
 
 # --- AUTO-ADDED STUBS: uniform visualization entrypoints ---
 def plot_primary(results_path: str, outdir: str) -> str:
     from pathlib import Path
     import pandas as pd
     import matplotlib.pyplot as plt
+
     Path(outdir).mkdir(parents=True, exist_ok=True)
     df = pd.read_parquet(results_path)
     plt.figure()
@@ -100,7 +116,8 @@ def plot_primary(results_path: str, outdir: str) -> str:
     for c in df.columns:
         try:
             if pd.api.types.is_numeric_dtype(df[c]):
-                col = c; break
+                col = c
+                break
         except Exception:
             pass
     if col is None:
@@ -108,15 +125,20 @@ def plot_primary(results_path: str, outdir: str) -> str:
         col = df.columns[0]
     plt.plot(range(len(df[col])), df[col])
     plt.title("Primary Plot (stub)")
-    plt.xlabel("index"); plt.ylabel(str(col))
+    plt.xlabel("index")
+    plt.ylabel(str(col))
     out = str(Path(outdir) / "primary.png")
-    plt.tight_layout(); plt.savefig(out, dpi=160); plt.close()
+    plt.tight_layout()
+    plt.savefig(out, dpi=160)
+    plt.close()
     return out
+
 
 def plot_secondary(results_path: str, outdir: str) -> str:
     from pathlib import Path
     import pandas as pd
     import matplotlib.pyplot as plt
+
     Path(outdir).mkdir(parents=True, exist_ok=True)
     df = pd.read_parquet(results_path)
     plt.figure()
@@ -125,7 +147,8 @@ def plot_secondary(results_path: str, outdir: str) -> str:
     for c in df.columns:
         try:
             if pd.api.types.is_numeric_dtype(df[c]):
-                col = c; break
+                col = c
+                break
         except Exception:
             pass
     if col is None:
@@ -136,8 +159,10 @@ def plot_secondary(results_path: str, outdir: str) -> str:
     except Exception:
         plt.plot(range(len(df[col])), df[col])
     plt.title("Secondary Plot (stub)")
-    plt.xlabel(str(col)); plt.ylabel("count")
+    plt.xlabel(str(col))
+    plt.ylabel("count")
     out = str(Path(outdir) / "secondary.png")
-    plt.tight_layout(); plt.savefig(out, dpi=160); plt.close()
+    plt.tight_layout()
+    plt.savefig(out, dpi=160)
+    plt.close()
     return out
-

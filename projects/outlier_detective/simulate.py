@@ -3,10 +3,16 @@ import numpy as np
 import pandas as pd
 
 from model import (
-    ZParams, ZRobustParams, IQRParams,
-    classical_z_scores, robust_z_scores, iqr_fences,
-    simulate_contaminated_sample, prf
+    ZParams,
+    ZRobustParams,
+    IQRParams,
+    classical_z_scores,
+    robust_z_scores,
+    iqr_fences,
+    simulate_contaminated_sample,
+    prf,
 )
+
 
 def run_simulation(cfg_path: str = "config.yaml", out_dir: str = "."):
     """
@@ -26,9 +32,13 @@ def run_simulation(cfg_path: str = "config.yaml", out_dir: str = "."):
     rows = []
     for eps in eps_grid:
         x, y = simulate_contaminated_sample(
-            n=n, epsilon=eps, rng=rng,
-            base_mu=base["mu"], base_sigma=base["sigma"],
-            out_mu=outd["mu"], out_sigma=outd["sigma"]
+            n=n,
+            epsilon=eps,
+            rng=rng,
+            base_mu=base["mu"],
+            base_sigma=base["sigma"],
+            out_mu=outd["mu"],
+            out_sigma=outd["sigma"],
         )
         m_z, _ = classical_z_scores(x, z_params)
         m_zr, _ = robust_z_scores(x, zr_params)
@@ -36,7 +46,9 @@ def run_simulation(cfg_path: str = "config.yaml", out_dir: str = "."):
 
         for name, m in [("z", m_z), ("z_robust", m_zr), ("iqr", m_iqr)]:
             p, r, f1 = prf(m, y)
-            rows.append({"epsilon": eps, "method": name, "precision": p, "recall": r, "f1": f1})
+            rows.append(
+                {"epsilon": eps, "method": name, "precision": p, "recall": r, "f1": f1}
+            )
 
     df = pd.DataFrame(rows)
     # Write results
@@ -51,9 +63,13 @@ def run_simulation(cfg_path: str = "config.yaml", out_dir: str = "."):
     # Save one sample for visualization
     eps_sample = float(cfg["sample_for_plot"]["epsilon"])
     x, y = simulate_contaminated_sample(
-        n=n, epsilon=eps_sample, rng=rng,
-        base_mu=base["mu"], base_sigma=base["sigma"],
-        out_mu=outd["mu"], out_sigma=outd["sigma"]
+        n=n,
+        epsilon=eps_sample,
+        rng=rng,
+        base_mu=base["mu"],
+        base_sigma=base["sigma"],
+        out_mu=outd["mu"],
+        out_sigma=outd["sigma"],
     )
     sample_df = pd.DataFrame({"x": x, "is_outlier": y})
     sample_path = os.path.join(out_dir, "sample.csv")
@@ -62,8 +78,10 @@ def run_simulation(cfg_path: str = "config.yaml", out_dir: str = "."):
         json.dump({"metrics": written, "sample": sample_path}, f)
     return written, sample_path
 
+
 if __name__ == "__main__":
     run_simulation(cfg_path="config.yaml", out_dir=".")
+
 
 # --- AUTO-ADDED STUB: uniform entrypoint ---
 def run(config_path: str) -> str:
@@ -73,9 +91,15 @@ def run(config_path: str) -> str:
     """
     from pathlib import Path
     import pandas as pd
+
     try:
         import yaml
-        cfg = yaml.safe_load(Path(config_path).read_text()) if Path(config_path).exists() else {}
+
+        cfg = (
+            yaml.safe_load(Path(config_path).read_text())
+            if Path(config_path).exists()
+            else {}
+        )
     except Exception:
         cfg = {}
     out = (cfg.get("paths", {}) or {}).get("results", "results.parquet")
@@ -84,6 +108,5 @@ def run(config_path: str) -> str:
         outp.parent.mkdir(parents=True, exist_ok=True)
     # If some existing main already produced an artifact, keep it. Otherwise, write a tiny placeholder.
     if not outp.exists():
-        pd.DataFrame({"placeholder":[0]}).to_parquet(outp)
+        pd.DataFrame({"placeholder": [0]}).to_parquet(outp)
     return str(outp)
-

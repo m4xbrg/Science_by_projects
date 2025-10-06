@@ -5,6 +5,7 @@ from typing import Tuple, Optional
 
 EPS = np.finfo(float).eps
 
+
 @dataclass
 class LinAlgReport:
     rank: int
@@ -12,6 +13,7 @@ class LinAlgReport:
     det: float
     cond2: Optional[float]  # 2-norm condition number (if computed)
     notes: str
+
 
 class MatrixWorkbench:
     """
@@ -77,11 +79,11 @@ class MatrixWorkbench:
                 L[[k, p], :k] = L[[p, k], :k]
             L[k, k] = 1.0
             # elimination
-            for i in range(k+1, n):
+            for i in range(k + 1, n):
                 if U[k, k] == 0.0:
                     continue
                 L[i, k] = U[i, k] / U[k, k]
-                U[i, k:] = U[i, k:] - L[i, k]*U[k, k:]
+                U[i, k:] = U[i, k:] - L[i, k] * U[k, k:]
                 U[i, k] = 0.0
         return P, L, U
 
@@ -106,7 +108,7 @@ class MatrixWorkbench:
         Q = np.eye(n)
         R = A.copy()
 
-        for k in range(n-1):
+        for k in range(n - 1):
             x = R[k:, k]
             normx = np.linalg.norm(x)
             if normx == 0:
@@ -161,14 +163,16 @@ class MatrixWorkbench:
         P = np.vstack([X.ravel(), Y.ravel()])
 
         # edges along square boundary
-        corners = np.array([[0,0],[1,0],[1,1],[0,1],[0,0]], dtype=float).T  # (2,5)
-        edges = [corners[:, i:i+2] for i in range(4)]
+        corners = np.array(
+            [[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]], dtype=float
+        ).T  # (2,5)
+        edges = [corners[:, i : i + 2] for i in range(4)]
 
         # internal grid lines
         for x in xs:
-            edges.append(np.array([[x, x],[0,1]]))
+            edges.append(np.array([[x, x], [0, 1]]))
         for y in ys:
-            edges.append(np.array([[0,1],[y, y]]))
+            edges.append(np.array([[0, 1], [y, y]]))
         return P, edges
 
     @staticmethod
@@ -176,17 +180,22 @@ class MatrixWorkbench:
         """
         Wireframe edges for the unit cube [0,1]^3; returns list of (3,2) segments.
         """
-        verts = np.array([[x,y,z] for x in [0,1] for y in [0,1] for z in [0,1]], dtype=float)
+        verts = np.array(
+            [[x, y, z] for x in [0, 1] for y in [0, 1] for z in [0, 1]], dtype=float
+        )
         edges = []
-        idx = lambda x,y,z: x*4 + y*2 + z
-        for x in [0,1]:
-            for y in [0,1]:
-                edges.append(np.c_[verts[idx(x,y,0)], verts[idx(x,y,1)]].T)
-            for z in [0,1]:
-                edges.append(np.c_[verts[idx(x,0,z)], verts[idx(x,1,z)]].T)
-        for y in [0,1]:
-            for z in [0,1]:
-                edges.append(np.c_[verts[idx(0,y,z)], verts[idx(1,y,z)]].T)
+
+        def idx(x, y, z):
+            return x * 4 + y * 2 + z
+
+        for x in [0, 1]:
+            for y in [0, 1]:
+                edges.append(np.c_[verts[idx(x, y, 0)], verts[idx(x, y, 1)]].T)
+            for z in [0, 1]:
+                edges.append(np.c_[verts[idx(x, 0, z)], verts[idx(x, 1, z)]].T)
+        for y in [0, 1]:
+            for z in [0, 1]:
+                edges.append(np.c_[verts[idx(0, y, z)], verts[idx(1, y, z)]].T)
         return edges
 
     def transform_edges(self, edges: list) -> list:

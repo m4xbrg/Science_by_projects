@@ -1,4 +1,4 @@
-  """
+"""
 model.py — Core affine transformation primitives (2D) and polygon utilities.
 
 API highlights:
@@ -11,6 +11,7 @@ Conventions:
 - Radians for angles; right-handed coordinates.
 - Vertices shape: (N, 2). We'll not close polygons; plotting can close visually.
 """
+
 from __future__ import annotations
 from dataclasses import dataclass
 import math
@@ -25,6 +26,7 @@ I3 = np.eye(3)
 @dataclass(frozen=True)
 class OpSpec:
     """Canonical op spec for stronger typing (dicts also supported)."""
+
     type: str
     theta: Optional[float] = None
     center: Optional[Tuple[float, float]] = None
@@ -41,18 +43,14 @@ class Transform2D:
     @staticmethod
     def translate(tx: float, ty: float) -> Array:
         """Translation matrix T(tx, ty)."""
-        T = np.array([[1.0, 0.0, tx],
-                      [0.0, 1.0, ty],
-                      [0.0, 0.0, 1.0]], dtype=float)
+        T = np.array([[1.0, 0.0, tx], [0.0, 1.0, ty], [0.0, 0.0, 1.0]], dtype=float)
         return T
 
     @staticmethod
     def rotate(theta: float, center: Optional[Tuple[float, float]] = None) -> Array:
         """Rotation matrix R(theta) about origin, or about 'center' if provided."""
         c, s = math.cos(theta), math.sin(theta)
-        R = np.array([[c, -s, 0.0],
-                      [s,  c, 0.0],
-                      [0.0, 0.0, 1.0]], dtype=float)
+        R = np.array([[c, -s, 0.0], [s, c, 0.0], [0.0, 0.0, 1.0]], dtype=float)
         if center is None:
             return R
         cx, cy = center
@@ -68,17 +66,21 @@ class Transform2D:
             raise ValueError("Normal vector must be non-zero.")
         n /= norm
         nx, ny = n
-        H2 = np.array([[1 - 2*nx*nx, -2*nx*ny],
-                       [-2*nx*ny,    1 - 2*ny*ny]], dtype=float)
+        H2 = np.array(
+            [[1 - 2 * nx * nx, -2 * nx * ny], [-2 * nx * ny, 1 - 2 * ny * ny]],
+            dtype=float,
+        )
         # Lift to 3x3 homogeneous
         H = np.eye(3, dtype=float)
         H[:2, :2] = H2
         return H
 
     @staticmethod
-    def reflect(normal: Optional[Tuple[float, float]] = None,
-                angle: Optional[float] = None,
-                point: Optional[Tuple[float, float]] = None) -> Array:
+    def reflect(
+        normal: Optional[Tuple[float, float]] = None,
+        angle: Optional[float] = None,
+        point: Optional[Tuple[float, float]] = None,
+    ) -> Array:
         """
         Reflection matrix across a line:
         - If 'normal' provided: reflect across line with that (unit or non-unit) normal at origin.

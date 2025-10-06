@@ -6,7 +6,13 @@ import pandas as pd
 
 from model import MatrixWorkbench
 
-def run(matrix: np.ndarray, grid_res: int = 11, compute_3d: bool = True, outdir: str = "results"):
+
+def run(
+    matrix: np.ndarray,
+    grid_res: int = 11,
+    compute_3d: bool = True,
+    outdir: str = "results",
+):
     """
     Execute diagnostics and prepare transformed geometry samples.
     """
@@ -33,14 +39,23 @@ def run(matrix: np.ndarray, grid_res: int = 11, compute_3d: bool = True, outdir:
         edges3T = mw.transform_edges(edges3)
         rows = []
         for i, e in enumerate(edges3):
-            rows.append({"seg": i, "space": "orig", "x": e[0,0], "y": e[1,0], "z": e[2,0]})
-            rows.append({"seg": i, "space": "orig", "x": e[0,1], "y": e[1,1], "z": e[2,1]})
+            rows.append(
+                {"seg": i, "space": "orig", "x": e[0, 0], "y": e[1, 0], "z": e[2, 0]}
+            )
+            rows.append(
+                {"seg": i, "space": "orig", "x": e[0, 1], "y": e[1, 1], "z": e[2, 1]}
+            )
         for i, e in enumerate(edges3T):
-            rows.append({"seg": i, "space": "trans", "x": e[0,0], "y": e[1,0], "z": e[2,0]})
-            rows.append({"seg": i, "space": "trans", "x": e[0,1], "y": e[1,1], "z": e[2,1]})
+            rows.append(
+                {"seg": i, "space": "trans", "x": e[0, 0], "y": e[1, 0], "z": e[2, 0]}
+            )
+            rows.append(
+                {"seg": i, "space": "trans", "x": e[0, 1], "y": e[1, 1], "z": e[2, 1]}
+            )
         pd.DataFrame(rows).to_parquet(out / "edges3d.parquet", index=False)
+
 
 if __name__ == "__main__":
     # Example default A; override via config.yaml in CLI wrapper if desired
-    A = np.array([[1.0, 0.5],[0.2, 1.2]])
+    A = np.array([[1.0, 0.5], [0.2, 1.2]])
     run(A, grid_res=13, compute_3d=False)

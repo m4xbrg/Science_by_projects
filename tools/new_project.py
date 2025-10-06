@@ -39,17 +39,29 @@ def plot_secondary(results_path: str, outdir: str) -> str:
     out = str(Path(outdir)/"secondary.png"); plt.tight_layout(); plt.savefig(out, dpi=160); plt.close(); return out
 """,
     "figs/.gitkeep": "",
-    "meta.json": json.dumps({
-        "title": "{title}",
-        "domain": ["{domain}"],
-        "math_core": ["{math_core}"],
-        "computational_tools": ["NumPy","SciPy","Pandas","Matplotlib","PyYAML","PyArrow"],
-        "visualization_types": ["curve_plots"],
-        "portfolio_links": [],
-        "stage": "scaffolded",
-        "created": "{created}"
-    }, indent=2) + "\n"
+    "meta.json": json.dumps(
+        {
+            "title": "{title}",
+            "domain": ["{domain}"],
+            "math_core": ["{math_core}"],
+            "computational_tools": [
+                "NumPy",
+                "SciPy",
+                "Pandas",
+                "Matplotlib",
+                "PyYAML",
+                "PyArrow",
+            ],
+            "visualization_types": ["curve_plots"],
+            "portfolio_links": [],
+            "stage": "scaffolded",
+            "created": "{created}",
+        },
+        indent=2,
+    )
+    + "\n",
 }
+
 
 def create_from_skeleton(dst: Path, title: str, domain: str, math_core: str):
     created = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
@@ -58,9 +70,12 @@ def create_from_skeleton(dst: Path, title: str, domain: str, math_core: str):
         p = dst / rel
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(
-            content.format(title=title, domain=domain, math_core=math_core, created=created),
-            encoding="utf-8"
+            content.format(
+                title=title, domain=domain, math_core=math_core, created=created
+            ),
+            encoding="utf-8",
         )
+
 
 def main():
     ap = argparse.ArgumentParser()
@@ -72,22 +87,24 @@ def main():
 
     dst = PROJECTS / args.slug
     if dst.exists():
-        print(f"Project already exists: {dst}", file=sys.stderr); sys.exit(1)
+        print(f"Project already exists: {dst}", file=sys.stderr)
+        sys.exit(1)
 
     # If you maintain a richer template_project, copy it and patch meta later
     if TEMPLATE.exists():
         shutil.copytree(TEMPLATE, dst)
         # ensure simulate/viz stubs exist
-        for req in ["simulate.py","viz.py"]:
-            if not (dst/req).exists():
-                (dst/req).write_text(SKELETON[req], encoding="utf-8")
-        if not (dst/"meta.json").exists():
+        for req in ["simulate.py", "viz.py"]:
+            if not (dst / req).exists():
+                (dst / req).write_text(SKELETON[req], encoding="utf-8")
+        if not (dst / "meta.json").exists():
             create_from_skeleton(dst, args.title, args.domain, args.math_core)
     else:
         create_from_skeleton(dst, args.title, args.domain, args.math_core)
 
     print(dst)
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

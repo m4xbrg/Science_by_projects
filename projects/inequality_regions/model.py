@@ -45,7 +45,7 @@ def monotone_chain_convex_hull(points, tol: float = 1e-12):
         return pts
 
     def cross(o, a, b):
-        return (a[0] - o[0])*(b[1] - o[1]) - (a[1] - o[1])*(b[0] - o[0])
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
 
     lower = []
     for p in pts:
@@ -104,7 +104,9 @@ def feasible_region_2d(inequalities: List[Dict], add_bbox=None, tol: float = 1e-
     return {"A": A, "b": b, "vertices": hull, "raw_points": pts, "bounded": bounded}
 
 
-def plot_feasible_region(result, inequalities, view, title="Feasible Region", fname=None):
+def plot_feasible_region(
+    result, inequalities, view, title="Feasible Region", fname=None
+):
     """Plot boundary lines, feasible polygon, and labeled vertices."""
     xmin, xmax, ymin, ymax = view
     xs = np.linspace(xmin, xmax, 500)
@@ -119,11 +121,21 @@ def plot_feasible_region(result, inequalities, view, title="Feasible Region", fn
     for c in inequalities:
         a, b, sense = np.array(c["a"], dtype=float), float(c["b"]), c["sense"]
         if abs(a[1]) > 1e-12:
-            ys = (b - a[0]*xs)/a[1]
-            ax.plot(xs, ys, linewidth=1.5, label=f"{a[0]:.2g}x + {a[1]:.2g}y {sense} {b:.2g}")
+            ys = (b - a[0] * xs) / a[1]
+            ax.plot(
+                xs,
+                ys,
+                linewidth=1.5,
+                label=f"{a[0]:.2g}x + {a[1]:.2g}y {sense} {b:.2g}",
+            )
         else:
             xv = b / a[0] if abs(a[0]) > 1e-12 else np.nan
-            ax.plot([xv, xv], [ymin, ymax], linewidth=1.5, label=f"{a[0]:.2g}x + {a[1]:.2g}y {sense} {b:.2g}")
+            ax.plot(
+                [xv, xv],
+                [ymin, ymax],
+                linewidth=1.5,
+                label=f"{a[0]:.2g}x + {a[1]:.2g}y {sense} {b:.2g}",
+            )
 
     if result["bounded"] and len(result["vertices"]) >= 3:
         vx = [p[0] for p in result["vertices"]]
@@ -141,7 +153,9 @@ def plot_feasible_region(result, inequalities, view, title="Feasible Region", fn
     plt.close(fig)
 
 
-def plot_feasibility_heatmap(inequalities, view, grid_n: int = 200, title="Feasibility Count Heatmap", fname=None):
+def plot_feasibility_heatmap(
+    inequalities, view, grid_n: int = 200, title="Feasibility Count Heatmap", fname=None
+):
     """Heatmap of how many inequalities are satisfied across the viewport grid."""
     xmin, xmax, ymin, ymax = view
     xs = np.linspace(xmin, xmax, grid_n)
@@ -150,7 +164,7 @@ def plot_feasibility_heatmap(inequalities, view, grid_n: int = 200, title="Feasi
     count = np.zeros_like(X, dtype=int)
     for c in inequalities:
         a_can, b_can = normalize_ineq(tuple(c["a"]), c["b"], c["sense"])
-        count += ((a_can[0]*X + a_can[1]*Y) <= (b_can + 1e-9)).astype(int)
+        count += ((a_can[0] * X + a_can[1] * Y) <= (b_can + 1e-9)).astype(int)
 
     fig = plt.figure(figsize=(6, 5.5))
     ax = plt.gca()

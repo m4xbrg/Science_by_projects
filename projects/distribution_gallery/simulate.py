@@ -2,12 +2,14 @@
 simulate.py — Run sampling for configured distributions, compute sample moments,
 and save tidy results to CSV (Parquet if available).
 """
+
 from __future__ import annotations
 import yaml
 from pathlib import Path
 import numpy as np
 import pandas as pd
 from model import make_model
+
 
 def sample_moments(x: np.ndarray) -> dict:
     """Compute sample moments: mean, variance (unbiased), skew, excess kurtosis."""
@@ -20,7 +22,14 @@ def sample_moments(x: np.ndarray) -> dict:
     m4 = (centered**4).mean()
     skew = m3 / (m2**1.5 + 1e-12)
     kurt_excess = m4 / (m2**2 + 1e-12) - 3.0
-    return {"n": n, "mean": float(mean), "var": float(var), "skew": float(skew), "kurtosis_excess": float(kurt_excess)}
+    return {
+        "n": n,
+        "mean": float(mean),
+        "var": float(var),
+        "skew": float(skew),
+        "kurtosis_excess": float(kurt_excess),
+    }
+
 
 def run(config_path: str | Path) -> Path:
     cfg = yaml.safe_load(Path(config_path).read_text())
@@ -56,6 +65,7 @@ def run(config_path: str | Path) -> Path:
     for name, x in all_samples.items():
         np.save(samples_dir / f"{name}.npy", x)
     return out_path
+
 
 if __name__ == "__main__":
     out = run("config.yaml")

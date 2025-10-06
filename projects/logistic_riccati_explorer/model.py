@@ -9,10 +9,12 @@ from typing import Dict, Tuple
 
 Array = np.ndarray
 
+
 @dataclass
 class LogisticParams:
     r: float
     K: float
+
 
 @dataclass
 class RiccatiParams:
@@ -20,6 +22,7 @@ class RiccatiParams:
     a: float
     b: float
     c: float
+
 
 def rhs_logistic(t: float, x: Array, params: Dict) -> Array:
     """
@@ -45,13 +48,17 @@ def rhs_logistic(t: float, x: Array, params: Dict) -> Array:
     x_val = float(x[0]) if np.ndim(x) else float(x)
     return np.array([r * x_val * (1.0 - x_val / K)])
 
+
 def rhs_riccati(t: float, x: Array, params: Dict) -> Array:
     """
     Constant-coefficient Riccati: dx/dt = a x^2 + b x + c
     """
-    a = float(params["a"]); b = float(params["b"]); c = float(params["c"])
+    a = float(params["a"])
+    b = float(params["b"])
+    c = float(params["c"])
     x_val = float(x[0]) if np.ndim(x) else float(x)
     return np.array([a * x_val**2 + b * x_val + c])
+
 
 def logistic_analytic(t: Array, x0: float, params: Dict) -> Array:
     """
@@ -71,21 +78,27 @@ def logistic_analytic(t: Array, x0: float, params: Dict) -> Array:
     np.ndarray
         x(t) values
     """
-    r = float(params["r"]); K = float(params["K"])
+    r = float(params["r"])
+    K = float(params["K"])
     t = np.asarray(t, dtype=float)
     if x0 == 0.0:
         return np.zeros_like(t)
     denom = 1.0 + ((K - x0) / x0) * np.exp(-r * t)
     return K / denom
 
+
 def jacobian_logistic(x: float, params: Dict) -> float:
     """
     ∂f/∂x for logistic f(x) = r x (1 - x/K) = r x - (r/K) x^2
     """
-    r = float(params["r"]); K = float(params["K"])
+    r = float(params["r"])
+    K = float(params["K"])
     return r * (1.0 - 2.0 * x / K)
 
-def sensitivities_logistic_rhs(t: float, y: Array, params: Dict, wrt: Tuple[str, ...]) -> Array:
+
+def sensitivities_logistic_rhs(
+    t: float, y: Array, params: Dict, wrt: Tuple[str, ...]
+) -> Array:
     """
     Augmented ODE for logistic sensitivities using forward sensitivities.
 
@@ -106,7 +119,8 @@ def sensitivities_logistic_rhs(t: float, y: Array, params: Dict, wrt: Tuple[str,
         Time derivative of augmented state.
     """
     x = y[0]
-    r = float(params["r"]); K = float(params["K"])
+    r = float(params["r"])
+    K = float(params["K"])
     # Base RHS
     fx = r * x * (1.0 - x / K)
     # Jacobian wrt x
