@@ -17,9 +17,9 @@
     "PyArrow"
   ],
   "visualization_types": [
-    "curve plots",
-    "phase portraits",
-    "uncertainty ribbons"
+    "time_series",
+    "phase_portrait",
+    "stacked_area"
   ],
   "portfolio_links": [
     "deterministic ODE solvers (solve_ivp)",
@@ -33,6 +33,6 @@
     "interventions",
     "compartmental models"
   ],
-  "stage": "scaffolded",
+  "stage": "runnable",
   "created": "2025-10-05T23:01:36+00:00"
 }
