@@ -79,7 +79,7 @@ def animate_gs(dim: int, outpath: str):
             for i in range(Qcur.shape[1]):
                 q = Qcur[:, i]
                 ax.quiver(0, 0, q[0], q[1], angles="xy", scale_units="xy", scale=1)
-            ax.set_title(f"MGS step {k+1}/{len(steps)}")
+            ax.set_title(f"MGS step {k + 1}/{len(steps)}")
             return []
 
         ani = FuncAnimation(fig, update, frames=len(steps), blit=False, repeat=False)
@@ -105,7 +105,7 @@ def animate_gs(dim: int, outpath: str):
             for i in range(Qcur.shape[1]):
                 q = Qcur[:, i]
                 ax.quiver(0, 0, 0, q[0], q[1], q[2])
-            ax.set_title(f"MGS step {k+1}/{len(steps)}")
+            ax.set_title(f"MGS step {k + 1}/{len(steps)}")
             return []
 
         ani = FuncAnimation(fig, update, frames=len(steps), blit=False, repeat=False)

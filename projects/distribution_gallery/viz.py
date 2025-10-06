@@ -27,7 +27,7 @@ def plot_pdf_or_pmf(ax, model, spec, samples, cfg_plot):
         ax.hist(samples, bins=60, density=True, alpha=0.3, label="Sample histogram")
         ax.set_xlabel("x")
         ax.set_ylabel("density")
-        ax.set_title(f'{spec["name"].title()} — PDF & histogram')
+        ax.set_title(f"{spec['name'].title()} — PDF & histogram")
     else:
         k = np.arange(cfg_plot["k_min"], cfg_plot["k_max"] + 1)
         ax.stem(k, model.pmf(k), basefmt=" ", label="PMF", use_line_collection=True)
@@ -40,7 +40,7 @@ def plot_pdf_or_pmf(ax, model, spec, samples, cfg_plot):
         )
         ax.set_xlabel("k")
         ax.set_ylabel("probability")
-        ax.set_title(f'{spec["name"].title()} — PMF & normalized counts')
+        ax.set_title(f"{spec['name'].title()} — PMF & normalized counts")
     ax.legend()
 
 
@@ -54,7 +54,7 @@ def plot_cdf(ax, model, spec, samples, cfg_plot):
     ax.step(ecx, ecy, where="post", label="Empirical CDF")
     ax.set_xlabel("x" if spec["type"] == "continuous" else "k")
     ax.set_ylabel("F(x)")
-    ax.set_title(f'{spec["name"].title()} — CDF vs ECDF')
+    ax.set_title(f"{spec['name'].title()} — CDF vs ECDF")
     ax.legend()
 
 

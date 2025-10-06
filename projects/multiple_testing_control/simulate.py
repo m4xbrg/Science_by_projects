@@ -35,7 +35,7 @@ def monte_carlo(m=1000, pi1=0.2, mu=3.0, n_runs=250, alphas=None, seed=42):
                         "mean_FDR": np.mean(FDRl),
                         "FWER": np.mean(FWERl),
                         "TPR": np.mean(TPRl),
-                    }
+                    },
                 )
             )
     return pd.DataFrame(rows)
